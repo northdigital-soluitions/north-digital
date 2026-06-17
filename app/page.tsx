@@ -1,16 +1,16 @@
 "use client";
-
+ 
 import Image from "next/image";
 import { useEffect, useRef, useState, useCallback, memo } from "react";
-
+ 
 const WA_NUMBER = "522287775402";
 const IG_USER   = "northdigital.mx";
 const EMAIL_D   = "northdigital.mx@gmail.com";
 const EMAIL_S   = "hola@northstudio.mx";
-
+ 
 type Mode   = "digital" | "studio";
 type Region = "MX" | "US";
-
+ 
 const T = {
   MX: {
     nav: { about: "nosotros", pricing: "precios", contact: "contacto" },
@@ -149,10 +149,10 @@ const T = {
     },
   },
 };
-
+ 
 type PriceRow     = { label_MX: string; label_US: string; mxn: string; usd: string };
 type PriceSection = { title_MX: string; title_US: string; rows: PriceRow[]; icon: string };
-
+ 
 const DIGITAL_SECTIONS: PriceSection[] = [
   {
     title_MX: "Desarrollo web", title_US: "Web development", icon: "🌐",
@@ -194,7 +194,7 @@ const DIGITAL_SECTIONS: PriceSection[] = [
     ],
   },
 ];
-
+ 
 const STUDIO_SECTIONS: PriceSection[] = [
   {
     title_MX: "Invitaciones digitales", title_US: "Digital invitations", icon: "✉",
@@ -234,15 +234,15 @@ const STUDIO_SECTIONS: PriceSection[] = [
     ],
   },
 ];
-
+ 
 const GOLD        = "#B8912A";
 const GOLD_BORDER = "rgba(184,145,42,0.25)";
-
+ 
 const GLOBAL_CSS = `
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body { background: #000; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
-
+ 
   @media (max-width: 480px) { .nav-links { display: none !important; } }
   @media (max-width: 768px) {
     .nav-links      { display: none !important; }
@@ -254,51 +254,51 @@ const GLOBAL_CSS = `
   @media (prefers-reduced-motion: reduce) {
     * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
   }
-
+ 
   .nav-inner { padding: 14px 16px; }
   @media (min-width: 769px) {
     .nav-inner { padding: 14px 24px 14px 108px; }
   }
-
+ 
   .mode-pill-desktop { display: flex; }
   @media (max-width: 768px) {
     .mode-pill-desktop { display: none !important; }
   }
-
+ 
   .region-switcher { position: fixed; top: 16px; left: 16px; z-index: 100; }
   @media (max-width: 768px) {
     .region-switcher       { left: auto; right: 12px; top: 12px; }
     .region-switcher-label { display: none; }
   }
-
+ 
   .section-wrap { padding: 100px 24px; }
   @media (max-width: 768px) {
     .section-wrap { padding: 64px 20px; }
   }
-
+ 
   @media (max-width: 480px) {
     .mode-banner-half { padding: 38px 18px !important; }
   }
-
+ 
   @keyframes scrollBounce {
     0%,100% { opacity: 0.22; transform: translateX(-50%) translateY(0px); }
     55%      { opacity: 0.50; transform: translateX(-50%) translateY(7px); }
   }
-
+ 
   @keyframes modeFadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to   { opacity: 1; transform: translateY(0); }
   }
-
+ 
   @keyframes navIn {
     from { opacity: 0; transform: translateY(-5px); }
     to   { opacity: 1; transform: translateY(0); }
   }
-
+ 
   .price-row { transition: background 0.18s; }
   .price-row:hover { background: rgba(0,0,0,0.025) !important; }
   .price-row-gold:hover { background: rgba(184,145,42,0.04) !important; }
-
+ 
   .msg-textarea { resize: vertical; }
   .msg-textarea:focus { outline: none; }
   .msg-textarea-d:focus { border-color: rgba(255,255,255,0.3) !important; }
@@ -306,20 +306,20 @@ const GLOBAL_CSS = `
   .msg-textarea-d::placeholder { color: rgba(255,255,255,0.2); }
   .msg-textarea-s::placeholder { color: rgba(184,145,42,0.35); }
 `;
-
+ 
 function useReveal(direction: "up" | "left" | "right" = "up", delay = 0) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
-
+ 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-
+ 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setVisible(true);
       return;
     }
-
+ 
     const checkImmediate = () => {
       const rect = el.getBoundingClientRect();
       if (rect.top < window.innerHeight - 40) {
@@ -328,12 +328,12 @@ function useReveal(direction: "up" | "left" | "right" = "up", delay = 0) {
       }
       return false;
     };
-
+ 
     if (checkImmediate()) return;
     const tick = setTimeout(() => {
       if (checkImmediate()) return;
     }, 50);
-
+ 
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -353,27 +353,27 @@ function useReveal(direction: "up" | "left" | "right" = "up", delay = 0) {
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+ 
   const offset =
     direction === "left"  ? "translateX(-32px)" :
     direction === "right" ? "translateX(32px)"  :
     "translateY(30px)";
-
+ 
   const style: React.CSSProperties = {
     opacity:    visible ? 1 : 0,
     transform:  visible ? "translate(0,0)" : offset,
     transition: `opacity 0.75s cubic-bezier(0.22,1,0.36,1) ${delay}s, transform 0.75s cubic-bezier(0.22,1,0.36,1) ${delay}s`,
     willChange: "opacity, transform",
   };
-
+ 
   return { ref, style };
 }
-
+ 
 function ModeFade({ mode, children }: { mode: Mode; children: string }) {
   const [shown, setShown]     = useState(true);
   const [content, setContent] = useState(children);
   const prevMode = useRef(mode);
-
+ 
   useEffect(() => {
     if (prevMode.current === mode) {
       setContent(children);
@@ -388,7 +388,7 @@ function ModeFade({ mode, children }: { mode: Mode; children: string }) {
     return () => clearTimeout(t);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode, children]);
-
+ 
   return (
     <span style={{
       display: "inline-block",
@@ -401,7 +401,7 @@ function ModeFade({ mode, children }: { mode: Mode; children: string }) {
     </span>
   );
 }
-
+ 
 function Particles({ color }: { color: string }) {
   const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
@@ -443,7 +443,7 @@ function Particles({ color }: { color: string }) {
     <canvas ref={ref} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 0 }} />
   );
 }
-
+ 
 function RegionSwitcher({ region, setRegion, mode, shown }: {
   region: Region; setRegion: (r: Region) => void; mode: Mode; shown: boolean;
 }) {
@@ -478,7 +478,7 @@ function RegionSwitcher({ region, setRegion, mode, shown }: {
     </div>
   );
 }
-
+ 
 function Nav({ mode, setMode, scrollTo, region, scrollY }: {
   mode: Mode; setMode: (m: Mode) => void; scrollTo: (id: string) => void; region: Region; scrollY: number;
 }) {
@@ -487,7 +487,7 @@ function Nav({ mode, setMode, scrollTo, region, scrollY }: {
   const [mobileOpen, setMobileOpen] = useState(false);
   const d = mode === "digital";
   const t = T[region].nav;
-
+ 
   return (
     <nav style={{
       position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
@@ -509,7 +509,7 @@ function Nav({ mode, setMode, scrollTo, region, scrollY }: {
             opacity: scrolled ? 1 : 0.8, transition: "opacity 0.35s, color 0.4s",
           }}>NORTH</span>
         </div>
-
+ 
         <div className="nav-links" style={{
           display: "flex", alignItems: "center", gap: 32,
           opacity: linksShown ? 1 : 0,
@@ -531,7 +531,7 @@ function Nav({ mode, setMode, scrollTo, region, scrollY }: {
             </button>
           ))}
         </div>
-
+ 
         <div className="mode-pill-desktop" style={{
           padding: "5px", borderRadius: 100,
           background: d ? "rgba(255,255,255,0.07)" : "rgba(184,145,42,0.07)",
@@ -548,13 +548,13 @@ function Nav({ mode, setMode, scrollTo, region, scrollY }: {
             }}>{m === "digital" ? "Digital" : "Studio"}</button>
           ))}
         </div>
-
+ 
         <button className="nav-hamburger" onClick={() => setMobileOpen(o => !o)}
           style={{ display: "none", flexDirection: "column", gap: 5, background: "none", border: "none", cursor: "pointer", padding: 8 }}>
           {[0,1,2].map(i => <span key={i} style={{ display: "block", width: 22, height: 2, borderRadius: 2, background: d ? "#fff" : "#0a0a0a" }} />)}
         </button>
       </div>
-
+ 
       {mobileOpen && (
         <div style={{
           background: d ? "rgba(0,0,0,0.97)" : "rgba(255,255,255,0.97)",
@@ -588,7 +588,7 @@ function Nav({ mode, setMode, scrollTo, region, scrollY }: {
     </nav>
   );
 }
-
+ 
 const Hero = memo(function Hero({ mode, scrollTo, region }: { mode: Mode; scrollTo: (id: string) => void; region: Region }) {
   const d = mode === "digital";
   const [vis, setVis] = useState(false);
@@ -597,10 +597,10 @@ const Hero = memo(function Hero({ mode, scrollTo, region }: { mode: Mode; scroll
     const t = setTimeout(() => setVis(true), 80);
     return () => clearTimeout(t);
   }, [mode]);
-
+ 
   const t  = T[region];
   const ht = d ? t.hero.digital : t.hero.studio;
-
+ 
   return (
     <section style={{
       position: "relative", minHeight: "100svh",
@@ -609,7 +609,7 @@ const Hero = memo(function Hero({ mode, scrollTo, region }: { mode: Mode; scroll
       transition: "background 0.6s ease",
     }}>
       <Particles color={d ? "#ffffff" : GOLD} />
-
+ 
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",
         background: d
@@ -617,7 +617,7 @@ const Hero = memo(function Hero({ mode, scrollTo, region }: { mode: Mode; scroll
           : `radial-gradient(ellipse 60% 50% at 50% 50%, rgba(184,145,42,0.055) 0%, transparent 70%)`,
         transition: "background 0.6s",
       }} />
-
+ 
       <div style={{
         position: "absolute", bottom: "8%", left: "50%", transform: "translateX(-50%)",
         fontFamily: "'Inter',sans-serif", fontWeight: 900,
@@ -627,7 +627,7 @@ const Hero = memo(function Hero({ mode, scrollTo, region }: { mode: Mode; scroll
         pointerEvents: "none", userSelect: "none", zIndex: 0,
         transition: "color 0.6s",
       }}>{d ? "DIGITAL" : "STUDIO"}</div>
-
+ 
       <div style={{
         position: "relative", zIndex: 10, width: "100%", maxWidth: 700, margin: "0 auto",
         padding: "0 24px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center",
@@ -643,7 +643,7 @@ const Hero = memo(function Hero({ mode, scrollTo, region }: { mode: Mode; scroll
           <Image src="/north_digital_logo.png" alt="North Digital" width={120} height={120}
             style={{ objectFit: "contain", position: "relative" }} />
         </div>
-
+ 
         <div style={{ marginBottom: 12, display: "flex", alignItems: "baseline", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
           <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 900, fontSize: "clamp(40px,8vw,88px)", color: d ? "#fff" : "#0f0d08", letterSpacing: "-0.03em", lineHeight: 1 }}>NORTH</span>
           <span style={{
@@ -653,18 +653,18 @@ const Hero = memo(function Hero({ mode, scrollTo, region }: { mode: Mode; scroll
             transition: "color 0.5s",
           }}>{d ? "DIGITAL" : "STUDIO"}</span>
         </div>
-
+ 
         <p style={{
           fontFamily: "'Inter',sans-serif", fontSize: 11, letterSpacing: "0.45em", textTransform: "uppercase",
           color: d ? "rgba(255,255,255,0.33)" : "rgba(184,145,42,0.7)", marginBottom: 26,
           transition: "color 0.4s",
         }}>{ht.tagline}</p>
-
+ 
         <p style={{
           fontFamily: "'Inter',sans-serif", fontSize: 15, lineHeight: 1.75, fontWeight: 300, maxWidth: 520,
           color: d ? "rgba(255,255,255,0.46)" : "rgba(15,13,8,0.5)", marginBottom: 40,
         }}>{ht.desc}</p>
-
+ 
         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: 12 }}>
           <a href={`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(t.wa_msg.quote)}`}
             target="_blank" rel="noopener noreferrer"
@@ -691,7 +691,7 @@ const Hero = memo(function Hero({ mode, scrollTo, region }: { mode: Mode; scroll
             {t.hero.cta_secondary}
           </button>
         </div>
-
+ 
         <div style={{
           marginTop: 52, paddingTop: 36, display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 24,
           width: "100%", maxWidth: 360,
@@ -709,7 +709,7 @@ const Hero = memo(function Hero({ mode, scrollTo, region }: { mode: Mode; scroll
           ))}
         </div>
       </div>
-
+ 
       <div style={{ position: "absolute", bottom: 38, left: "50%", zIndex: 10, animation: "scrollBounce 2.4s ease-in-out infinite", display: "flex", flexDirection: "column", alignItems: "center", gap: 7 }}>
         <div style={{ width: 1, height: 38, background: d ? "rgba(255,255,255,0.3)" : `rgba(184,145,42,0.5)` }} />
         <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 8, letterSpacing: "0.55em", textTransform: "uppercase", color: d ? "rgba(255,255,255,0.3)" : `rgba(184,145,42,0.5)` }}>scroll</span>
@@ -717,11 +717,11 @@ const Hero = memo(function Hero({ mode, scrollTo, region }: { mode: Mode; scroll
     </section>
   );
 });
-
+ 
 const ModeBanner = memo(function ModeBanner({ mode, setMode }: { mode: Mode; setMode: (m: Mode) => void }) {
   const d      = mode === "digital";
   const reveal = useReveal("up", 0);
-
+ 
   return (
     <div ref={reveal.ref} style={{ ...reveal.style, display: "flex", alignItems: "stretch" }}>
       <button className="mode-banner-half" onClick={() => setMode("digital")} style={{
@@ -745,9 +745,9 @@ const ModeBanner = memo(function ModeBanner({ mode, setMode }: { mode: Mode; set
         }}>Marketing · Branding · IA</span>
         {!d && <span style={{ marginTop: 6, fontFamily: "'Inter',sans-serif", fontSize: 9, letterSpacing: "0.28em", textTransform: "uppercase", color: "rgba(0,0,0,0.28)", border: "1px solid rgba(0,0,0,0.1)", borderRadius: 100, padding: "5px 14px" }}>Explorar →</span>}
       </button>
-
+ 
       <div style={{ width: 1, background: d ? "rgba(255,255,255,0.05)" : GOLD_BORDER, flexShrink: 0 }} />
-
+ 
       <button className="mode-banner-half" onClick={() => setMode("studio")} style={{
         flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
         padding: "52px 32px", border: "none", cursor: "pointer", gap: 10, position: "relative", overflow: "hidden",
@@ -773,7 +773,7 @@ const ModeBanner = memo(function ModeBanner({ mode, setMode }: { mode: Mode; set
     </div>
   );
 });
-
+ 
 /* ─── Nosotros — SIN DATOS PERSONALES ───────────────────── */
 const Nosotros = memo(function Nosotros({ mode, region }: { mode: Mode; region: Region }) {
   const d      = mode === "digital";
@@ -782,7 +782,7 @@ const Nosotros = memo(function Nosotros({ mode, region }: { mode: Mode; region: 
   const muted  = d ? "rgba(255,255,255,0.42)" : "rgba(15,13,8,0.46)";
   const border = d ? "rgba(255,255,255,0.07)" : GOLD_BORDER;
   const ta     = T[region].about;
-
+ 
   const eyebrow   = d ? ta.eyebrow_d : ta.eyebrow_s;
   const title     = d ? ta.title_d : ta.title_s;
   const desc1     = d ? ta.desc1_d : ta.desc1_s;
@@ -791,16 +791,16 @@ const Nosotros = memo(function Nosotros({ mode, region }: { mode: Mode; region: 
   const badges    = d ? ta.badges_d : ta.badges_s;
   const teamIntro = d ? ta.team_intro_d : ta.team_intro_s;
   const pillars   = d ? ta.team_pillars_d : ta.team_pillars_s;
-
+ 
   const headerReveal = useReveal("up", 0);
   const left         = useReveal("left", 0.1);
   const right        = useReveal("right", 0.18);
   const teamReveal   = useReveal("up", 0.08);
-
+ 
   return (
     <section id="nosotros" style={{ background: bg, borderTop: `1px solid ${border}`, transition: "background 0.5s" }}>
       <div className="section-wrap" style={{ maxWidth: 1100, margin: "0 auto" }}>
-
+ 
         {/* Header */}
         <div ref={headerReveal.ref} style={{ ...headerReveal.style, marginBottom: 56 }}>
           <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, letterSpacing: "0.5em", textTransform: "uppercase", color: muted, marginBottom: 16, transition: "color 0.4s ease" }}>
@@ -810,7 +810,7 @@ const Nosotros = memo(function Nosotros({ mode, region }: { mode: Mode; region: 
             <ModeFade mode={mode}>{title}</ModeFade>
           </h2>
         </div>
-
+ 
         {/* Two-column description */}
         <div className="nosotros-grid" style={{ display: "grid", marginBottom: 64 }}>
           <div ref={left.ref} style={left.style}>
@@ -821,30 +821,40 @@ const Nosotros = memo(function Nosotros({ mode, region }: { mode: Mode; region: 
               <ModeFade mode={mode}>{desc2}</ModeFade>
             </p>
           </div>
-          <div ref={right.ref} style={{ ...right.style, display: "flex", flexDirection: "column", gap: 20 }}>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, lineHeight: 1.8, fontWeight: 300, color: muted, transition: "color 0.4s ease" }}>
-              <ModeFade mode={mode}>{teamIntro}</ModeFade>
-            </p>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-              {values.map((v, i) => (
-                <span key={`val-${i}`} style={{
-                  fontFamily: "'Inter',sans-serif", fontSize: 9, letterSpacing: "0.22em", textTransform: "uppercase",
-                  padding: "7px 14px", borderRadius: 100, border: `1px solid ${border}`, color: muted,
-                  transition: "color 0.4s ease, border-color 0.4s ease",
-                }}>
-                  <ModeFade mode={mode}>{v}</ModeFade>
-                </span>
-              ))}
+          <div ref={right.ref} style={right.style}>
+            <div style={{
+              background: "#fff",
+              borderRadius: 20,
+              padding: 32,
+              display: "flex",
+              flexDirection: "column",
+              gap: 20,
+              boxShadow: d ? "0 10px 36px rgba(0,0,0,0.4)" : "0 4px 22px rgba(15,13,8,0.06)",
+              border: d ? "none" : `1px solid ${GOLD_BORDER}`,
+            }}>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, lineHeight: 1.8, fontWeight: 300, color: "rgba(15,13,8,0.62)" }}>
+                <ModeFade mode={mode}>{teamIntro}</ModeFade>
+              </p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                {values.map((v, i) => (
+                  <span key={`val-${i}`} style={{
+                    fontFamily: "'Inter',sans-serif", fontSize: 9, letterSpacing: "0.22em", textTransform: "uppercase",
+                    padding: "7px 14px", borderRadius: 100, border: "1px solid rgba(15,13,8,0.14)", color: "rgba(15,13,8,0.55)",
+                  }}>
+                    <ModeFade mode={mode}>{v}</ModeFade>
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         </div>
-
+ 
         {/* Pillars — reemplaza la sección de team members */}
         <div ref={teamReveal.ref} style={teamReveal.style}>
           <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, letterSpacing: "0.5em", textTransform: "uppercase", color: muted, marginBottom: 28 }}>
             {ta.team_label}
           </p>
-
+ 
           <div className="team-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
             {pillars.map((pillar, idx) => (
               <div key={idx} style={{
@@ -869,7 +879,7 @@ const Nosotros = memo(function Nosotros({ mode, region }: { mode: Mode; region: 
               </div>
             ))}
           </div>
-
+ 
           {/* Bilingual badge */}
           <div style={{
             marginTop: 24, display: "inline-flex", alignItems: "center", gap: 12,
@@ -886,7 +896,7 @@ const Nosotros = memo(function Nosotros({ mode, region }: { mode: Mode; region: 
               </p>
             </div>
           </div>
-
+ 
           {/* Shared badges */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 20 }}>
             {badges.map((b, i) => (
@@ -901,7 +911,7 @@ const Nosotros = memo(function Nosotros({ mode, region }: { mode: Mode; region: 
           </div>
         </div>
       </div>
-
+ 
       <style>{`
         .nosotros-grid {
           grid-template-columns: 1fr 1fr;
@@ -916,7 +926,7 @@ const Nosotros = memo(function Nosotros({ mode, region }: { mode: Mode; region: 
     </section>
   );
 });
-
+ 
 const PriceSectionCard = memo(function PriceSectionCard({ section, d, region, delay }: { section: PriceSection; d: boolean; region: Region; delay: number }) {
   const [expanded, setExpanded] = useState(true);
   const reveal = useReveal("up", delay);
@@ -927,7 +937,7 @@ const PriceSectionCard = memo(function PriceSectionCard({ section, d, region, de
   const rows   = section.rows.filter(r => region === "US" ? r.usd !== "—" : true);
   const first  = region === "MX" ? rows[0]?.mxn : rows[0]?.usd;
   const rowCls = d ? "price-row" : "price-row price-row-gold";
-
+ 
   return (
     <div ref={reveal.ref} style={{ ...reveal.style, border: `1px solid ${border}`, borderRadius: 16, overflow: "hidden", marginBottom: 16 }}>
       <button onClick={() => setExpanded(e => !e)} style={{
@@ -965,7 +975,7 @@ const PriceSectionCard = memo(function PriceSectionCard({ section, d, region, de
     </div>
   );
 });
-
+ 
 const Precios = memo(function Precios({ mode, region }: { mode: Mode; region: Region }) {
   const d        = mode === "digital";
   const text     = d ? "#0a0a0a" : "#0f0d08";
@@ -974,7 +984,7 @@ const Precios = memo(function Precios({ mode, region }: { mode: Mode; region: Re
   const t        = T[region].pricing;
   const sections = d ? DIGITAL_SECTIONS : STUDIO_SECTIONS;
   const head     = useReveal("up", 0);
-
+ 
   return (
     <section id="precios" style={{ background: "#fff", borderTop: `1px solid ${border}` }}>
       <div className="section-wrap" style={{ maxWidth: 860, margin: "0 auto" }}>
@@ -1007,7 +1017,7 @@ const Precios = memo(function Precios({ mode, region }: { mode: Mode; region: Re
     </section>
   );
 });
-
+ 
 const Contacto = memo(function Contacto({ mode, region }: { mode: Mode; region: Region }) {
   const d       = mode === "digital";
   const bg      = d ? "#0a0a0a" : "#fff";
@@ -1018,14 +1028,14 @@ const Contacto = memo(function Contacto({ mode, region }: { mode: Mode; region: 
   const email   = d ? EMAIL_D : EMAIL_S;
   const t       = T[region].contact;
   const [msg, setMsg] = useState("");
-
+ 
   const left  = useReveal("left", 0);
   const right = useReveal("right", 0.1);
-
+ 
   const waFull = msg.trim()
     ? `${T[region].wa_msg.contact}\n\n${msg.trim()}`
     : T[region].wa_msg.contact;
-
+ 
   return (
     <section id="contacto" style={{ background: bg, borderTop: `1px solid ${border}`, transition: "background 0.5s" }}>
       <div className="section-wrap" style={{ maxWidth: 1100, margin: "0 auto" }}>
@@ -1040,7 +1050,7 @@ const Contacto = memo(function Contacto({ mode, region }: { mode: Mode; region: 
               <a href={`https://www.instagram.com/${IG_USER}`} target="_blank" rel="noopener noreferrer" style={{ color: muted, textDecoration: "none", letterSpacing: "0.14em", textTransform: "uppercase" }}>@{IG_USER}</a>
             </div>
           </div>
-
+ 
           <div ref={right.ref} style={right.style}>
             <div style={{ background: d ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.02)", border: `1px solid ${border}`, borderRadius: 24, padding: 32 }}>
               <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, letterSpacing: "0.4em", textTransform: "uppercase", color: muted, marginBottom: 20 }}>
@@ -1093,12 +1103,12 @@ const Contacto = memo(function Contacto({ mode, region }: { mode: Mode; region: 
     </section>
   );
 });
-
+ 
 const Footer = memo(function Footer({ mode, region }: { mode: Mode; region: Region }) {
   const d    = mode === "digital";
   const text = d ? "rgba(255,255,255,0.18)" : "rgba(184,145,42,0.5)";
   const bdr  = d ? "rgba(255,255,255,0.05)" : GOLD_BORDER;
-
+ 
   return (
     <footer style={{ background: d ? "#000" : "#fff", borderTop: `1px solid ${bdr}`, padding: "28px 24px", transition: "background 0.5s" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 16, fontFamily: "'Inter',sans-serif", fontSize: 9, letterSpacing: "0.3em", textTransform: "uppercase", color: text }}>
@@ -1112,12 +1122,12 @@ const Footer = memo(function Footer({ mode, region }: { mode: Mode; region: Regi
     </footer>
   );
 });
-
+ 
 export default function Home() {
   const [mode,   setMode]   = useState<Mode>("digital");
   const [region, setRegion] = useState<Region>("MX");
   const [scrollY, setScrollY] = useState(0);
-
+ 
   useEffect(() => {
     let raf = 0;
     const handle = () => {
@@ -1133,13 +1143,13 @@ export default function Home() {
       if (raf) cancelAnimationFrame(raf);
     };
   }, []);
-
+ 
   const scrollTo = useCallback((id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   }, []);
-
+ 
   const navScrolled = scrollY > 50;
-
+ 
   return (
     <>
       <style>{GLOBAL_CSS}</style>
