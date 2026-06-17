@@ -40,27 +40,19 @@ const T = {
       desc1_s: "Somos el equipo creativo detrás de tus momentos más especiales. Diseñamos invitaciones digitales, menús, flyers y presentaciones para personas, fiestas y restaurantes con sello propio.",
       desc2_s: "Cada diseño cuenta una historia — la tuya. Trabajamos contigo para que cada pieza refleje exactamente la vibra que buscas: elegante, divertida, moderna o íntima.",
       values_s: ["Diseño", "Creatividad", "Personalización", "Calidez"],
-      team_label: "El equipo",
-      team_intro_d: "Combinamos visión estratégica de marketing con dominio técnico en desarrollo y automatización. Dos mentes distintas, un solo objetivo: hacer crecer tu negocio.",
-      team_intro_s: "Una mezcla única de sensibilidad creativa y precisión técnica. Juntos diseñamos piezas que no solo se ven bien — también comunican exactamente lo que necesitas.",
-      members: [
-        {
-          name: "Emiliano Landa",
-          role_d: "Tecnología & Desarrollo",
-          role_s: "Dirección Técnica",
-          bio_d: "Especialista en desarrollo de software, automatización y soluciones digitales. Construye la infraestructura que hace que todo funcione — rápido, escalable y a medida.",
-          bio_s: "Experto en producción digital y automatización de flujos creativos. Se asegura de que cada pieza llegue perfecta y a tiempo.",
-          initials: "EL",
-        },
-        {
-          name: "Colaboradora",
-          role_d: "Marketing & Estrategia",
-          role_s: "Dirección Creativa",
-          bio_d: "Experta en posicionamiento de marca, redes sociales y comunicación estratégica. Traduce los objetivos de tu negocio en mensajes que conectan con tu audiencia.",
-          bio_s: "Ojo creativo con experiencia en identidad visual y diseño de comunicación. Da vida a cada proyecto con coherencia y carácter.",
-          initials: "ND",
-        },
+      team_label: "Nuestro equipo",
+      team_intro_d: "Somos un equipo multidisciplinario que combina dominio técnico en desarrollo y automatización con visión estratégica de marketing y comunicación. Trabajamos con enfoque en resultados, atención personalizada y capacidad de operar tanto en español como en inglés — nivel B2/C1 — para proyectos locales e internacionales.",
+      team_intro_s: "Somos un equipo creativo que fusiona sensibilidad estética con precisión técnica. Cada proyecto es tratado con criterio propio y atención al detalle, y contamos con capacidad bilingüe — español e inglés (B2/C1) — para atender proyectos con alcance internacional.",
+      team_pillars_d: [
+        { icon: "⚙️", label: "Tecnología & Desarrollo", desc: "Infraestructura digital a medida: sitios web, automatizaciones y aplicaciones construidas para escalar." },
+        { icon: "◈", label: "Marketing & Estrategia", desc: "Posicionamiento de marca, gestión de redes sociales y comunicación orientada a resultados reales." },
       ],
+      team_pillars_s: [
+        { icon: "✦", label: "Dirección Creativa", desc: "Identidad visual, diseño de piezas y criterio estético aplicado a cada entrega." },
+        { icon: "▣", label: "Producción Digital", desc: "Flujos de producción optimizados para garantizar calidad, precisión y tiempos cumplidos." },
+      ],
+      bilingual_label: "Atención bilingüe",
+      bilingual_note: "Español · English (B2/C1)",
       badges_d: ["Desarrollo Web", "Automatización", "Marketing Digital", "Branding"],
       badges_s: ["Diseño Gráfico", "Identidad Visual", "Estrategia Creativa", "Producción Digital"],
     },
@@ -116,27 +108,19 @@ const T = {
       desc1_s: "We are the creative team behind your most special moments. We design digital invitations, menus, flyers, and presentations for individuals, celebrations, and restaurants with a distinctive touch.",
       desc2_s: "Every design tells a story — yours. We work with you so each piece reflects exactly the vibe you're after: elegant, fun, modern, or intimate.",
       values_s: ["Design", "Creativity", "Personalization", "Warmth"],
-      team_label: "The team",
-      team_intro_d: "We combine strategic marketing vision with technical expertise in development and automation. Two distinct minds, one goal: growing your business.",
-      team_intro_s: "A unique blend of creative sensibility and technical precision. Together we design pieces that don't just look good — they communicate exactly what you need.",
-      members: [
-        {
-          name: "Emiliano Landa",
-          role_d: "Technology & Development",
-          role_s: "Technical Direction",
-          bio_d: "Software development, automation, and digital solutions specialist. Builds the infrastructure that makes everything work — fast, scalable, and custom-built.",
-          bio_s: "Expert in digital production and creative workflow automation. Makes sure every piece arrives perfect and on time.",
-          initials: "EL",
-        },
-        {
-          name: "Team Member",
-          role_d: "Marketing & Strategy",
-          role_s: "Creative Direction",
-          bio_d: "Expert in brand positioning, social media, and strategic communication. Translates your business goals into messages that connect with your audience.",
-          bio_s: "Creative eye with experience in visual identity and communication design. Brings each project to life with coherence and character.",
-          initials: "ND",
-        },
+      team_label: "Our team",
+      team_intro_d: "We are a multidisciplinary team combining technical expertise in software development and automation with strategic vision in marketing and communication. We work with a results-driven approach, personalized attention, and full bilingual capacity — Spanish and English (B2/C1) — to serve both local and international clients.",
+      team_intro_s: "We are a creative team that blends aesthetic sensibility with technical precision. Every project is handled with intention and attention to detail, and we operate with full bilingual capacity — Spanish and English (B2/C1) — to support projects with international reach.",
+      team_pillars_d: [
+        { icon: "⚙️", label: "Technology & Development", desc: "Custom digital infrastructure: websites, automations, and applications built to scale." },
+        { icon: "◈", label: "Marketing & Strategy", desc: "Brand positioning, social media management, and communication focused on measurable outcomes." },
       ],
+      team_pillars_s: [
+        { icon: "✦", label: "Creative Direction", desc: "Visual identity, design production, and aesthetic judgment applied to every deliverable." },
+        { icon: "▣", label: "Digital Production", desc: "Optimized production workflows that ensure quality, precision, and on-time delivery." },
+      ],
+      bilingual_label: "Bilingual service",
+      bilingual_note: "Español · English (B2/C1)",
       badges_d: ["Web Development", "Automation", "Digital Marketing", "Branding"],
       badges_s: ["Graphic Design", "Visual Identity", "Creative Strategy", "Digital Production"],
     },
@@ -323,15 +307,6 @@ const GLOBAL_CSS = `
   .msg-textarea-s::placeholder { color: rgba(184,145,42,0.35); }
 `;
 
-/* ─── useReveal — FIXED VERSION ───────────────────────────────────────
-   Cambios clave vs versión anterior:
-   1. rootMargin: "0px 0px -60px 0px" → dispara ANTES de que el elemento
-      llegue al 100% del viewport, no después.
-   2. threshold: 0.05 → basta con que el 5% del elemento sea visible.
-   3. El check inicial usa setTimeout(0) para correr DESPUÉS del paint,
-      momento en que getBoundingClientRect() es confiable.
-   4. Si el elemento ya es visible al montar, setVisible(true) de inmediato.
-*/
 function useReveal(direction: "up" | "left" | "right" = "up", delay = 0) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -345,7 +320,6 @@ function useReveal(direction: "up" | "left" | "right" = "up", delay = 0) {
       return;
     }
 
-    // Check after first paint so layout is stable
     const checkImmediate = () => {
       const rect = el.getBoundingClientRect();
       if (rect.top < window.innerHeight - 40) {
@@ -355,7 +329,6 @@ function useReveal(direction: "up" | "left" | "right" = "up", delay = 0) {
       return false;
     };
 
-    // Try immediately, then after a tick
     if (checkImmediate()) return;
     const tick = setTimeout(() => {
       if (checkImmediate()) return;
@@ -396,7 +369,6 @@ function useReveal(direction: "up" | "left" | "right" = "up", delay = 0) {
   return { ref, style };
 }
 
-/* ─── ModeFade ──────────────────────────────────────────────────────── */
 function ModeFade({ mode, children }: { mode: Mode; children: string }) {
   const [shown, setShown]     = useState(true);
   const [content, setContent] = useState(children);
@@ -430,7 +402,6 @@ function ModeFade({ mode, children }: { mode: Mode; children: string }) {
   );
 }
 
-/* ─── Particles ─────────────────────────────────────────── */
 function Particles({ color }: { color: string }) {
   const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
@@ -473,7 +444,6 @@ function Particles({ color }: { color: string }) {
   );
 }
 
-/* ─── Region Switcher ────────────────────────────────────── */
 function RegionSwitcher({ region, setRegion, mode, shown }: {
   region: Region; setRegion: (r: Region) => void; mode: Mode; shown: boolean;
 }) {
@@ -509,7 +479,6 @@ function RegionSwitcher({ region, setRegion, mode, shown }: {
   );
 }
 
-/* ─── Nav ────────────────────────────────────────────────── */
 function Nav({ mode, setMode, scrollTo, region, scrollY }: {
   mode: Mode; setMode: (m: Mode) => void; scrollTo: (id: string) => void; region: Region; scrollY: number;
 }) {
@@ -620,7 +589,6 @@ function Nav({ mode, setMode, scrollTo, region, scrollY }: {
   );
 }
 
-/* ─── Hero ───────────────────────────────────────────────── */
 const Hero = memo(function Hero({ mode, scrollTo, region }: { mode: Mode; scrollTo: (id: string) => void; region: Region }) {
   const d = mode === "digital";
   const [vis, setVis] = useState(false);
@@ -750,7 +718,6 @@ const Hero = memo(function Hero({ mode, scrollTo, region }: { mode: Mode; scroll
   );
 });
 
-/* ─── ModeBanner ─────────────────────────────────────────── */
 const ModeBanner = memo(function ModeBanner({ mode, setMode }: { mode: Mode; setMode: (m: Mode) => void }) {
   const d      = mode === "digital";
   const reveal = useReveal("up", 0);
@@ -807,7 +774,7 @@ const ModeBanner = memo(function ModeBanner({ mode, setMode }: { mode: Mode; set
   );
 });
 
-/* ─── Nosotros — TEAM VERSION ────────────────────────────── */
+/* ─── Nosotros — SIN DATOS PERSONALES ───────────────────── */
 const Nosotros = memo(function Nosotros({ mode, region }: { mode: Mode; region: Region }) {
   const d      = mode === "digital";
   const bg     = d ? "#0a0a0a" : "#fff";
@@ -816,13 +783,14 @@ const Nosotros = memo(function Nosotros({ mode, region }: { mode: Mode; region: 
   const border = d ? "rgba(255,255,255,0.07)" : GOLD_BORDER;
   const ta     = T[region].about;
 
-  const eyebrow = d ? ta.eyebrow_d : ta.eyebrow_s;
-  const title   = d ? ta.title_d : ta.title_s;
-  const desc1   = d ? ta.desc1_d : ta.desc1_s;
-  const desc2   = d ? ta.desc2_d : ta.desc2_s;
-  const values  = d ? ta.values_d : ta.values_s;
-  const badges  = d ? ta.badges_d : ta.badges_s;
+  const eyebrow   = d ? ta.eyebrow_d : ta.eyebrow_s;
+  const title     = d ? ta.title_d : ta.title_s;
+  const desc1     = d ? ta.desc1_d : ta.desc1_s;
+  const desc2     = d ? ta.desc2_d : ta.desc2_s;
+  const values    = d ? ta.values_d : ta.values_s;
+  const badges    = d ? ta.badges_d : ta.badges_s;
   const teamIntro = d ? ta.team_intro_d : ta.team_intro_s;
+  const pillars   = d ? ta.team_pillars_d : ta.team_pillars_s;
 
   const headerReveal = useReveal("up", 0);
   const left         = useReveal("left", 0.1);
@@ -871,57 +839,56 @@ const Nosotros = memo(function Nosotros({ mode, region }: { mode: Mode; region: 
           </div>
         </div>
 
-        {/* Team members */}
+        {/* Pillars — reemplaza la sección de team members */}
         <div ref={teamReveal.ref} style={teamReveal.style}>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, letterSpacing: "0.5em", textTransform: "uppercase", color: muted, marginBottom: 28 }}>{ta.team_label}</p>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, letterSpacing: "0.5em", textTransform: "uppercase", color: muted, marginBottom: 28 }}>
+            {ta.team_label}
+          </p>
+
           <div className="team-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
-            {ta.members.map((member, idx) => (
+            {pillars.map((pillar, idx) => (
               <div key={idx} style={{
                 background: d ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.025)",
-                border: `1px solid ${border}`, borderRadius: 20, padding: 28,
+                border: `1px solid ${border}`, borderRadius: 20, padding: 32,
                 transition: "border-color 0.4s",
               }}>
-                {/* Avatar placeholder */}
-                <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 20 }}>
-                  <div style={{
-                    width: 52, height: 52, borderRadius: "50%", flexShrink: 0,
-                    background: d
-                      ? "rgba(255,255,255,0.06)"
-                      : `rgba(184,145,42,0.1)`,
-                    border: `1px solid ${border}`,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                  }}>
-                    {idx === 0 ? (
-                      <Image
-                        src="/foto_emiliano.jpg" alt={member.name}
-                        width={52} height={52}
-                        style={{ objectFit: "cover", width: "100%", height: "100%", borderRadius: "50%" }}
-                        onError={e => {
-                          (e.currentTarget as HTMLImageElement).style.display = "none";
-                          const parent = (e.currentTarget as HTMLImageElement).parentElement;
-                          if (parent) parent.innerHTML = `<span style="font-family:'Inter',sans-serif;font-size:14px;font-weight:700;color:${d ? 'rgba(255,255,255,0.4)' : GOLD}">${member.initials}</span>`;
-                        }}
-                      />
-                    ) : (
-                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, fontWeight: 700, color: d ? "rgba(255,255,255,0.4)" : GOLD }}>{member.initials}</span>
-                    )}
-                  </div>
-                  <div>
-                    <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 15, color: text, lineHeight: 1.2 }}>{member.name}</p>
-                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: d ? "rgba(255,255,255,0.3)" : GOLD, marginTop: 5, transition: "color 0.4s" }}>
-                      <ModeFade mode={mode}>{d ? member.role_d : member.role_s}</ModeFade>
-                    </p>
-                  </div>
-                </div>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, lineHeight: 1.78, fontWeight: 300, color: muted, transition: "color 0.4s ease" }}>
-                  <ModeFade mode={mode}>{d ? member.bio_d : member.bio_s}</ModeFade>
+                <div style={{ fontSize: 22, marginBottom: 16 }}>{pillar.icon}</div>
+                <p style={{
+                  fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 12,
+                  letterSpacing: "0.18em", textTransform: "uppercase", color: text,
+                  marginBottom: 12, lineHeight: 1.4, transition: "color 0.4s",
+                }}>
+                  <ModeFade mode={mode}>{pillar.label}</ModeFade>
+                </p>
+                <p style={{
+                  fontFamily: "'Inter',sans-serif", fontSize: 13, lineHeight: 1.78,
+                  fontWeight: 300, color: muted, transition: "color 0.4s ease",
+                }}>
+                  <ModeFade mode={mode}>{pillar.desc}</ModeFade>
                 </p>
               </div>
             ))}
           </div>
 
+          {/* Bilingual badge */}
+          <div style={{
+            marginTop: 24, display: "inline-flex", alignItems: "center", gap: 12,
+            border: `1px solid ${border}`, borderRadius: 12, padding: "14px 20px",
+            background: d ? "rgba(255,255,255,0.02)" : "rgba(184,145,42,0.03)",
+          }}>
+            <span style={{ fontSize: 16 }}>🌐</span>
+            <div>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 9, letterSpacing: "0.28em", textTransform: "uppercase", color: d ? "rgba(255,255,255,0.28)" : GOLD, marginBottom: 3 }}>
+                {ta.bilingual_label}
+              </p>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: text, letterSpacing: "0.06em" }}>
+                {ta.bilingual_note}
+              </p>
+            </div>
+          </div>
+
           {/* Shared badges */}
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 24 }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 20 }}>
             {badges.map((b, i) => (
               <span key={`badge-${i}`} style={{
                 fontFamily: "'Inter',sans-serif", fontSize: 9, letterSpacing: "0.14em", textTransform: "uppercase",
@@ -950,7 +917,6 @@ const Nosotros = memo(function Nosotros({ mode, region }: { mode: Mode; region: 
   );
 });
 
-/* ─── Price card ─────────────────────────────────────────── */
 const PriceSectionCard = memo(function PriceSectionCard({ section, d, region, delay }: { section: PriceSection; d: boolean; region: Region; delay: number }) {
   const [expanded, setExpanded] = useState(true);
   const reveal = useReveal("up", delay);
@@ -1000,7 +966,6 @@ const PriceSectionCard = memo(function PriceSectionCard({ section, d, region, de
   );
 });
 
-/* ─── Precios ─────────────────────────────────────────────── */
 const Precios = memo(function Precios({ mode, region }: { mode: Mode; region: Region }) {
   const d        = mode === "digital";
   const text     = d ? "#0a0a0a" : "#0f0d08";
@@ -1043,7 +1008,6 @@ const Precios = memo(function Precios({ mode, region }: { mode: Mode; region: Re
   );
 });
 
-/* ─── Contacto ────────────────────────────────────────────── */
 const Contacto = memo(function Contacto({ mode, region }: { mode: Mode; region: Region }) {
   const d       = mode === "digital";
   const bg      = d ? "#0a0a0a" : "#fff";
@@ -1130,7 +1094,6 @@ const Contacto = memo(function Contacto({ mode, region }: { mode: Mode; region: 
   );
 });
 
-/* ─── Footer ─────────────────────────────────────────────── */
 const Footer = memo(function Footer({ mode, region }: { mode: Mode; region: Region }) {
   const d    = mode === "digital";
   const text = d ? "rgba(255,255,255,0.18)" : "rgba(184,145,42,0.5)";
@@ -1150,7 +1113,6 @@ const Footer = memo(function Footer({ mode, region }: { mode: Mode; region: Regi
   );
 });
 
-/* ─── Root ───────────────────────────────────────────────── */
 export default function Home() {
   const [mode,   setMode]   = useState<Mode>("digital");
   const [region, setRegion] = useState<Region>("MX");
