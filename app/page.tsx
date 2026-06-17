@@ -1,7 +1,24 @@
 "use client";
 
+/* ──────────────────────────────────────────────────────────────────────
+   CAMBIOS EN ESTA VERSIÓN
+   1. Nav móvil: se oculta el pill Digital/Studio (queda solo el logo +
+      hamburguesa) y el selector de región se mueve a la esquina derecha
+      en pantallas chicas, para que nada se solape con el logo "NORTH".
+   2. useReveal reescrito: en vez de manipular classList a mano, usa
+      estado de React + IntersectionObserver y devuelve un `style` que se
+      aplica normalmente. Es mucho más confiable entre re-renders.
+   3. Nuevo componente <ModeFade> para crossfade real de texto al cambiar
+      entre Digital/Studio (antes dependía de un truco con `key` + CSS
+      keyframes que no siempre se notaba).
+   4. Componentes pesados envueltos en memo() + scroll throttleado con
+      requestAnimationFrame, para que cambiar `scrollY` no vuelva a
+      renderizar toda la página en cada pixel de scroll (eso es lo que
+      estaba "ahogando" las animaciones).
+   ────────────────────────────────────────────────────────────────────── */
+
 import Image from "next/image";
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, memo } from "react";
 
 const WA_NUMBER = "522287775402";
 const IG_USER   = "northdigital.mx";
@@ -35,11 +52,9 @@ const T = {
       eyebrow_s: "Quiénes somos",
       title_d:   "North\nDigital",
       title_s:   "North\nStudio",
-      /* DIGITAL — tono corporativo */
       desc1_d: "Somos el aliado digital de comercios, empresas y marcas que buscan crecer. Desarrollamos presencia web, identidad visual y estrategias digitales con enfoque en resultados medibles.",
       desc2_d: "Desde una landing page hasta un sistema de automatización completo — llevamos tu operación al siguiente nivel con tecnología a medida y atención directa.",
       values_d: ["Tecnología", "Escalabilidad", "Resultados", "Estrategia"],
-      /* STUDIO — tono cálido/personal */
       desc1_s: "Somos el equipo creativo detrás de tus momentos más especiales. Diseñamos invitaciones digitales, menús, flyers y presentaciones para personas, fiestas y restaurantes con sello propio.",
       desc2_s: "Cada diseño cuenta una historia — la tuya. Trabajamos contigo para que cada pieza refleje exactamente la vibra que buscas: elegante, divertida, moderna o íntima.",
       values_s: ["Diseño", "Creatividad", "Personalización", "Calidez"],
@@ -229,17 +244,47 @@ const GOLD_BORDER = "rgba(184,145,42,0.25)";
 const GLOBAL_CSS = `
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
-  body { background: #000; -webkit-font-smoothing: antialiased; }
+  body { background: #000; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 
   @media (max-width: 480px) { .nav-links { display: none !important; } }
   @media (max-width: 768px) {
-    .nav-links    { display: none !important; }
-    .nav-hamburger { display: flex !important; }
-    .nosotros-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
-    .contact-grid  { grid-template-columns: 1fr !important; gap: 40px !important; }
+    .nav-links      { display: none !important; }
+    .nav-hamburger  { display: flex !important; }
+    .nosotros-grid  { grid-template-columns: 1fr !important; gap: 40px !important; }
+    .contact-grid   { grid-template-columns: 1fr !important; gap: 40px !important; }
   }
   @media (prefers-reduced-motion: reduce) {
     * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+
+  /* --- Nav: padding responsivo (antes era fijo y chocaba en móvil) --- */
+  .nav-inner { padding: 14px 16px; }
+  @media (min-width: 769px) {
+    .nav-inner { padding: 14px 24px 14px 108px; }
+  }
+
+  /* --- Pill Digital/Studio del nav: solo en desktop, en móvil se usa el menú hamburguesa --- */
+  .mode-pill-desktop { display: flex; }
+  @media (max-width: 768px) {
+    .mode-pill-desktop { display: none !important; }
+  }
+
+  /* --- Selector de región: en móvil se mueve a la derecha para no chocar con el logo --- */
+  .region-switcher { position: fixed; top: 16px; left: 16px; z-index: 100; }
+  @media (max-width: 768px) {
+    .region-switcher       { left: auto; right: 12px; top: 12px; }
+    .region-switcher-label { display: none; }
+  }
+
+  /* --- Padding de secciones, más compacto en móvil --- */
+  .section-wrap { padding: 100px 24px; }
+  @media (max-width: 768px) {
+    .section-wrap { padding: 64px 20px; }
+  }
+
+  /* --- Mitades del banner Digital/Studio, más compactas en pantallas chicas --- */
+  @media (max-width: 480px) {
+    .mode-banner-half { padding: 38px 18px !important; }
   }
 
   /* --- scroll indicator bounce --- */
@@ -248,27 +293,10 @@ const GLOBAL_CSS = `
     55%      { opacity: 0.50; transform: translateX(-50%) translateY(7px); }
   }
 
-  /* --- Fade in up (used on scroll-reveal) --- */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeLeft {
-    from { opacity: 0; transform: translateX(-32px); }
-    to   { opacity: 1; transform: translateX(0); }
-  }
-  @keyframes fadeRight {
-    from { opacity: 0; transform: translateX(32px); }
-    to   { opacity: 1; transform: translateX(0); }
-  }
-
-  /* --- Mode crossfade --- */
+  /* --- Mode crossfade (usado por el panel del menú móvil) --- */
   @keyframes modeFadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to   { opacity: 1; transform: translateY(0); }
-  }
-  .mode-content {
-    animation: modeFadeIn 0.45s cubic-bezier(0.22,1,0.36,1) both;
   }
 
   /* --- Nav link fade in --- */
@@ -282,14 +310,6 @@ const GLOBAL_CSS = `
   .price-row:hover { background: rgba(0,0,0,0.025) !important; }
   .price-row-gold:hover { background: rgba(184,145,42,0.04) !important; }
 
-  /* --- Scroll-reveal helpers --- */
-  .reveal            { opacity: 0; }
-  .reveal.visible    { animation: fadeUp   0.75s cubic-bezier(0.22,1,0.36,1) forwards; }
-  .reveal-l.visible  { animation: fadeLeft  0.75s cubic-bezier(0.22,1,0.36,1) forwards; }
-  .reveal-r.visible  { animation: fadeRight 0.75s cubic-bezier(0.22,1,0.36,1) forwards; }
-  .reveal-l          { opacity: 0; }
-  .reveal-r          { opacity: 0; }
-
   /* --- Textarea --- */
   .msg-textarea { resize: vertical; }
   .msg-textarea:focus { outline: none; }
@@ -299,27 +319,92 @@ const GLOBAL_CSS = `
   .msg-textarea-s::placeholder { color: rgba(184,145,42,0.35); }
 `;
 
-/* ─── useReveal — robust IntersectionObserver ────────────── */
+/* ─── useReveal — basado en estado de React, no en classList manual ───
+   Devuelve { ref, style }. El estilo se aplica como cualquier otro
+   inline style de React, por lo que sobrevive perfectamente a
+   re-renders del padre (a diferencia de manipular el DOM a mano). */
 function useReveal(direction: "up" | "left" | "right" = "up", delay = 0) {
   const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const cls = direction === "left" ? "reveal-l" : direction === "right" ? "reveal-r" : "reveal";
-    el.classList.add(cls);
-    const show = () => {
-      el.style.animationDelay = `${delay}s`;
-      el.classList.add("visible");
-    };
-    // Already in view on load?
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setVisible(true);
+      return;
+    }
+
     const rect = el.getBoundingClientRect();
-    if (rect.top < window.innerHeight * 0.92) { show(); return; }
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { show(); obs.disconnect(); } }, { threshold: 0.1 });
+    if (rect.top < window.innerHeight * 0.92) {
+      setVisible(true);
+      return;
+    }
+
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.12 }
+    );
     obs.observe(el);
     return () => obs.disconnect();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  return ref;
+
+  const offset =
+    direction === "left" ? "translateX(-32px)" :
+    direction === "right" ? "translateX(32px)" :
+    "translateY(30px)";
+
+  const style: React.CSSProperties = {
+    opacity: visible ? 1 : 0,
+    transform: visible ? "translate(0,0)" : offset,
+    transition: `opacity 0.75s cubic-bezier(0.22,1,0.36,1) ${delay}s, transform 0.75s cubic-bezier(0.22,1,0.36,1) ${delay}s`,
+    willChange: "opacity, transform",
+  };
+
+  return { ref, style };
+}
+
+/* ─── ModeFade — crossfade de texto al cambiar Digital/Studio ───────── */
+function ModeFade({ mode, children }: { mode: Mode; children: string }) {
+  const [shown, setShown]   = useState(true);
+  const [content, setContent] = useState(children);
+  const prevMode = useRef(mode);
+
+  useEffect(() => {
+    if (prevMode.current === mode) {
+      setContent(children);
+      return;
+    }
+    setShown(false);
+    const t = setTimeout(() => {
+      setContent(children);
+      setShown(true);
+      prevMode.current = mode;
+    }, 160);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode, children]);
+
+  return (
+    <span
+      style={{
+        display: "inline-block",
+        opacity: shown ? 1 : 0,
+        transform: shown ? "translateY(0)" : "translateY(6px)",
+        transition: "opacity 0.32s cubic-bezier(0.22,1,0.36,1), transform 0.32s cubic-bezier(0.22,1,0.36,1)",
+        whiteSpace: "inherit",
+      }}
+    >
+      {content}
+    </span>
+  );
 }
 
 /* ─── Particles ─────────────────────────────────────────── */
@@ -372,18 +457,19 @@ function RegionSwitcher({ region, setRegion, mode, shown }: {
   const d = mode === "digital";
   const FLAGS: Record<Region, string> = { MX: "/flag_mx.jpg", US: "/flag_us.jpg" };
   return (
-    <div style={{
-      position: "fixed", top: 16, left: 16, zIndex: 100,
-      display: "flex", alignItems: "center",
-      background: d ? "rgba(0,0,0,0.7)" : "rgba(255,253,248,0.92)",
-      border: d ? "1px solid rgba(255,255,255,0.12)" : `1px solid ${GOLD_BORDER}`,
-      borderRadius: 100, padding: "4px 5px",
-      backdropFilter: "blur(16px)",
-      opacity: shown ? 1 : 0,
-      transform: shown ? "translateY(0)" : "translateY(-10px)",
-      transition: "opacity 0.45s ease, transform 0.45s ease",
-      pointerEvents: shown ? "auto" : "none",
-    }}>
+    <div
+      className="region-switcher"
+      style={{
+        display: "flex", alignItems: "center",
+        background: d ? "rgba(0,0,0,0.7)" : "rgba(255,253,248,0.92)",
+        border: d ? "1px solid rgba(255,255,255,0.12)" : `1px solid ${GOLD_BORDER}`,
+        borderRadius: 100, padding: "4px 5px",
+        backdropFilter: "blur(16px)",
+        opacity: shown ? 1 : 0,
+        transform: shown ? "translateY(0)" : "translateY(-10px)",
+        transition: "opacity 0.45s ease, transform 0.45s ease",
+        pointerEvents: shown ? "auto" : "none",
+      }}>
       {(["MX", "US"] as Region[]).map(r => (
         <button key={r} onClick={() => setRegion(r)} style={{
           fontFamily: "'Inter',sans-serif", fontSize: 10, fontWeight: region === r ? 700 : 400,
@@ -395,7 +481,7 @@ function RegionSwitcher({ region, setRegion, mode, shown }: {
         }}>
           <Image src={FLAGS[r]} alt={r} width={18} height={13}
             style={{ borderRadius: 2, objectFit: "cover", opacity: region === r ? 1 : 0.4 }} />
-          {r}
+          <span className="region-switcher-label">{r}</span>
         </button>
       ))}
     </div>
@@ -420,7 +506,7 @@ function Nav({ mode, setMode, scrollTo, region, scrollY }: {
       borderBottom: scrolled ? (d ? "1px solid rgba(255,255,255,0.06)" : `1px solid ${GOLD_BORDER}`) : "none",
       transition: "background 0.4s, border-color 0.4s, backdrop-filter 0.4s",
     }}>
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "14px 24px 14px 108px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <div className="nav-inner" style={{ maxWidth: 1280, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
 
         {/* Logo */}
         <div style={{ display: "flex", alignItems: "center", gap: 11 }}>
@@ -432,7 +518,7 @@ function Nav({ mode, setMode, scrollTo, region, scrollY }: {
           <span style={{
             color: d ? "#fff" : "#0f0d08", fontFamily: "'Inter',sans-serif",
             fontWeight: 800, fontSize: 17, letterSpacing: "0.14em",
-            opacity: scrolled ? 1 : 0.8, transition: "opacity 0.35s",
+            opacity: scrolled ? 1 : 0.8, transition: "opacity 0.35s, color 0.4s",
           }}>NORTH</span>
         </div>
 
@@ -459,9 +545,9 @@ function Nav({ mode, setMode, scrollTo, region, scrollY }: {
           ))}
         </div>
 
-        {/* Mode pill */}
-        <div style={{
-          display: "flex", padding: "5px", borderRadius: 100,
+        {/* Mode pill — solo desktop, en móvil se usa el menú hamburguesa */}
+        <div className="mode-pill-desktop" style={{
+          padding: "5px", borderRadius: 100,
           background: d ? "rgba(255,255,255,0.07)" : "rgba(184,145,42,0.07)",
           border: d ? "1px solid rgba(255,255,255,0.12)" : `1px solid ${GOLD_BORDER}`,
         }}>
@@ -520,10 +606,9 @@ function Nav({ mode, setMode, scrollTo, region, scrollY }: {
 }
 
 /* ─── Hero ───────────────────────────────────────────────── */
-function Hero({ mode, scrollTo, region }: { mode: Mode; scrollTo: (id: string) => void; region: Region }) {
+const Hero = memo(function Hero({ mode, scrollTo, region }: { mode: Mode; scrollTo: (id: string) => void; region: Region }) {
   const d = mode === "digital";
   const [vis, setVis] = useState(false);
-  /* Re-trigger fade when mode changes */
   useEffect(() => {
     setVis(false);
     const t = setTimeout(() => setVis(true), 80);
@@ -655,18 +740,18 @@ function Hero({ mode, scrollTo, region }: { mode: Mode; scrollTo: (id: string) =
       </div>
     </section>
   );
-}
+});
 
 /* ─── ModeBanner — animated split ───────────────────────── */
-function ModeBanner({ mode, setMode }: { mode: Mode; setMode: (m: Mode) => void }) {
+const ModeBanner = memo(function ModeBanner({ mode, setMode }: { mode: Mode; setMode: (m: Mode) => void }) {
   const d   = mode === "digital";
-  const ref = useReveal("up", 0);
+  const reveal = useReveal("up", 0);
 
   return (
-    <div ref={ref} style={{ display: "flex", alignItems: "stretch" }}>
+    <div ref={reveal.ref} style={{ ...reveal.style, display: "flex", alignItems: "stretch" }}>
 
       {/* Digital */}
-      <button onClick={() => setMode("digital")} style={{
+      <button className="mode-banner-half" onClick={() => setMode("digital")} style={{
         flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
         padding: "52px 32px", border: "none", cursor: "pointer", gap: 10, position: "relative", overflow: "hidden",
         background: d ? "#0a0a0a" : "#f0f0f0",
@@ -693,7 +778,7 @@ function ModeBanner({ mode, setMode }: { mode: Mode; setMode: (m: Mode) => void 
       <div style={{ width: 1, background: d ? "rgba(255,255,255,0.05)" : GOLD_BORDER, flexShrink: 0 }} />
 
       {/* Studio */}
-      <button onClick={() => setMode("studio")} style={{
+      <button className="mode-banner-half" onClick={() => setMode("studio")} style={{
         flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
         padding: "52px 32px", border: "none", cursor: "pointer", gap: 10, position: "relative", overflow: "hidden",
         background: !d ? "#fff" : "#fdfaf3",
@@ -702,7 +787,6 @@ function ModeBanner({ mode, setMode }: { mode: Mode; setMode: (m: Mode) => void 
         onMouseOver={e => { if (d) (e.currentTarget as HTMLElement).style.background = "#fff6e2"; }}
         onMouseOut={e => { if (d) (e.currentTarget as HTMLElement).style.background = "#fdfaf3"; }}
       >
-        {/* Gold shimmer top */}
         <span style={{ position: "absolute", top: 0, left: "25%", right: "25%", height: 1, background: `linear-gradient(90deg,transparent,${GOLD},transparent)`, opacity: 0.5 }} />
         {!d && <span style={{ position: "absolute", bottom: 0, left: "50%", transform: "translateX(-50%)", width: 36, height: 3, background: GOLD, borderRadius: 2 }} />}
         <span style={{
@@ -720,10 +804,10 @@ function ModeBanner({ mode, setMode }: { mode: Mode; setMode: (m: Mode) => void 
       </button>
     </div>
   );
-}
+});
 
 /* ─── Nosotros ────────────────────────────────────────────── */
-function Nosotros({ mode, region }: { mode: Mode; region: Region }) {
+const Nosotros = memo(function Nosotros({ mode, region }: { mode: Mode; region: Region }) {
   const d      = mode === "digital";
   const bg     = d ? "#0a0a0a" : "#fff";
   const text   = d ? "#fff" : "#0f0d08";
@@ -731,7 +815,6 @@ function Nosotros({ mode, region }: { mode: Mode; region: Region }) {
   const border = d ? "rgba(255,255,255,0.07)" : GOLD_BORDER;
   const ta     = T[region].about;
 
-  /* Per-mode content */
   const eyebrow = d ? ta.eyebrow_d : ta.eyebrow_s;
   const title   = d ? ta.title_d : ta.title_s;
   const desc1   = d ? ta.desc1_d : ta.desc1_s;
@@ -739,43 +822,41 @@ function Nosotros({ mode, region }: { mode: Mode; region: Region }) {
   const values  = d ? ta.values_d : ta.values_s;
   const bio     = d ? ta.founder_bio_d : ta.founder_bio_s;
 
-  const leftRef  = useReveal("left",  0);
-  const rightRef = useReveal("right", 0.12);
+  const left  = useReveal("left",  0);
+  const right = useReveal("right", 0.12);
 
   return (
     <section id="nosotros" style={{ background: bg, borderTop: `1px solid ${border}`, transition: "background 0.5s" }}>
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "100px 24px", display: "grid" }}
-        className="nosotros-grid"
-        /* inline fallback for non-SSR */
-        // eslint-disable-next-line react/no-unknown-property
-      >
+      <div className="nosotros-grid section-wrap" style={{ maxWidth: 1200, margin: "0 auto", display: "grid" }}>
         {/* Left col */}
-        <div ref={leftRef}>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, letterSpacing: "0.5em", textTransform: "uppercase", color: muted, marginBottom: 20 }}>
-            <span key={`ey-${mode}`} className="mode-content">{eyebrow}</span>
+        <div ref={left.ref} style={left.style}>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, letterSpacing: "0.5em", textTransform: "uppercase", color: muted, marginBottom: 20, transition: "color 0.4s ease" }}>
+            <ModeFade mode={mode}>{eyebrow}</ModeFade>
           </p>
-          <h2 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 900, fontSize: "clamp(40px,5vw,60px)", letterSpacing: "-0.03em", lineHeight: 1.05, color: text, marginBottom: 28, textTransform: "uppercase", whiteSpace: "pre-line" }}>
-            <span key={`ti-${mode}`} className="mode-content">{title}</span>
+          <h2 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 900, fontSize: "clamp(40px,5vw,60px)", letterSpacing: "-0.03em", lineHeight: 1.05, color: text, marginBottom: 28, textTransform: "uppercase", whiteSpace: "pre-line", transition: "color 0.4s ease" }}>
+            <ModeFade mode={mode}>{title}</ModeFade>
           </h2>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, lineHeight: 1.82, fontWeight: 300, color: muted, maxWidth: 420, marginBottom: 16 }}>
-            <span key={`d1-${mode}`} className="mode-content">{desc1}</span>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, lineHeight: 1.82, fontWeight: 300, color: muted, maxWidth: 420, marginBottom: 16, transition: "color 0.4s ease" }}>
+            <ModeFade mode={mode}>{desc1}</ModeFade>
           </p>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, lineHeight: 1.82, fontWeight: 300, color: muted, maxWidth: 420, marginBottom: 32 }}>
-            <span key={`d2-${mode}`} className="mode-content">{desc2}</span>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, lineHeight: 1.82, fontWeight: 300, color: muted, maxWidth: 420, marginBottom: 32, transition: "color 0.4s ease" }}>
+            <ModeFade mode={mode}>{desc2}</ModeFade>
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
             {values.map((v, i) => (
-              <span key={`${v}-${mode}`} className="mode-content" style={{
+              <span key={`val-${i}`} style={{
                 fontFamily: "'Inter',sans-serif", fontSize: 9, letterSpacing: "0.22em", textTransform: "uppercase",
                 padding: "7px 14px", borderRadius: 100, border: `1px solid ${border}`, color: muted,
-                animationDelay: `${0.05 + i * 0.05}s`,
-              }}>{v}</span>
+                transition: "color 0.4s ease, border-color 0.4s ease",
+              }}>
+                <ModeFade mode={mode}>{v}</ModeFade>
+              </span>
             ))}
           </div>
         </div>
 
         {/* Right col — founder card */}
-        <div ref={rightRef} style={{ background: d ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.025)", border: `1px solid ${border}`, borderRadius: 24, padding: 36 }}>
+        <div ref={right.ref} style={{ ...right.style, background: d ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.025)", border: `1px solid ${border}`, borderRadius: 24, padding: 36 }}>
           <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, letterSpacing: "0.5em", textTransform: "uppercase", color: muted, marginBottom: 24 }}>{ta.founder_label}</p>
           <div style={{ display: "flex", alignItems: "center", gap: 20, marginBottom: 24 }}>
             <div style={{ width: 76, height: 76, borderRadius: "50%", overflow: "hidden", border: `2px solid ${border}`, flexShrink: 0 }}>
@@ -788,8 +869,8 @@ function Nosotros({ mode, region }: { mode: Mode; region: Region }) {
               <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase", color: muted, marginTop: 5 }}>{ta.founder_role}</p>
             </div>
           </div>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, lineHeight: 1.82, fontWeight: 300, color: muted, marginBottom: 24 }}>
-            <span key={`bio-${mode}`} className="mode-content">{bio}</span>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, lineHeight: 1.82, fontWeight: 300, color: muted, marginBottom: 24, transition: "color 0.4s ease" }}>
+            <ModeFade mode={mode}>{bio}</ModeFade>
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
             {ta.badges.map(b => (
@@ -799,7 +880,6 @@ function Nosotros({ mode, region }: { mode: Mode; region: Region }) {
         </div>
       </div>
 
-      {/* Grid layout style */}
       <style>{`
         .nosotros-grid {
           grid-template-columns: 1fr 1fr;
@@ -812,12 +892,12 @@ function Nosotros({ mode, region }: { mode: Mode; region: Region }) {
       `}</style>
     </section>
   );
-}
+});
 
 /* ─── Price card ─────────────────────────────────────────── */
-function PriceSectionCard({ section, d, region, delay }: { section: PriceSection; d: boolean; region: Region; delay: number }) {
+const PriceSectionCard = memo(function PriceSectionCard({ section, d, region, delay }: { section: PriceSection; d: boolean; region: Region; delay: number }) {
   const [expanded, setExpanded] = useState(true);
-  const ref    = useReveal("up", delay);
+  const reveal = useReveal("up", delay);
   const border = d ? "rgba(0,0,0,0.07)"   : GOLD_BORDER;
   const text   = d ? "#0a0a0a"             : "#0f0d08";
   const muted  = d ? "rgba(0,0,0,0.38)"   : "rgba(15,13,8,0.4)";
@@ -827,7 +907,7 @@ function PriceSectionCard({ section, d, region, delay }: { section: PriceSection
   const rowCls = d ? "price-row" : "price-row price-row-gold";
 
   return (
-    <div ref={ref} style={{ border: `1px solid ${border}`, borderRadius: 16, overflow: "hidden", marginBottom: 16 }}>
+    <div ref={reveal.ref} style={{ ...reveal.style, border: `1px solid ${border}`, borderRadius: 16, overflow: "hidden", marginBottom: 16 }}>
       <button onClick={() => setExpanded(e => !e)} style={{
         width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",
         gap: 12, padding: "18px 24px", background: accent, border: "none", cursor: "pointer", textAlign: "left",
@@ -862,34 +942,34 @@ function PriceSectionCard({ section, d, region, delay }: { section: PriceSection
       ))}
     </div>
   );
-}
+});
 
 /* ─── Precios ─────────────────────────────────────────────── */
-function Precios({ mode, region }: { mode: Mode; region: Region }) {
+const Precios = memo(function Precios({ mode, region }: { mode: Mode; region: Region }) {
   const d        = mode === "digital";
   const text     = d ? "#0a0a0a" : "#0f0d08";
   const muted    = d ? "rgba(0,0,0,0.4)" : "rgba(15,13,8,0.4)";
   const border   = d ? "rgba(0,0,0,0.07)" : GOLD_BORDER;
   const t        = T[region].pricing;
   const sections = d ? DIGITAL_SECTIONS : STUDIO_SECTIONS;
-  const headRef  = useReveal("up", 0);
+  const head     = useReveal("up", 0);
 
   return (
     <section id="precios" style={{ background: "#fff", borderTop: `1px solid ${border}` }}>
-      <div style={{ maxWidth: 860, margin: "0 auto", padding: "100px 24px" }}>
-        <div ref={headRef} style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: 52, flexWrap: "wrap", gap: 24 }}>
+      <div className="section-wrap" style={{ maxWidth: 860, margin: "0 auto" }}>
+        <div ref={head.ref} style={{ ...head.style, display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: 52, flexWrap: "wrap", gap: 24 }}>
           <div>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, letterSpacing: "0.5em", textTransform: "uppercase", color: muted, marginBottom: 12 }}>
-              {d ? t.eyebrow_d : t.eyebrow_s}
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, letterSpacing: "0.5em", textTransform: "uppercase", color: muted, marginBottom: 12, transition: "color 0.4s ease" }}>
+              <ModeFade mode={mode}>{d ? t.eyebrow_d : t.eyebrow_s}</ModeFade>
             </p>
-            <h2 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 900, fontSize: "clamp(36px,5vw,56px)", letterSpacing: "-0.03em", textTransform: "uppercase", color: text }}>{t.title}</h2>
+            <h2 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 900, fontSize: "clamp(36px,5vw,56px)", letterSpacing: "-0.03em", textTransform: "uppercase", color: text, transition: "color 0.4s ease" }}>{t.title}</h2>
           </div>
           <a href={`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(T[region].wa_msg.pricing)}`}
             target="_blank" rel="noopener noreferrer"
             style={{
               fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase",
               padding: "12px 26px", borderRadius: 100, background: d ? "#0a0a0a" : GOLD, color: "#fff",
-              textDecoration: "none", display: "inline-block", transition: "opacity 0.2s, transform 0.2s",
+              textDecoration: "none", display: "inline-block", transition: "opacity 0.2s, transform 0.2s, background 0.4s",
             }}
             onMouseOver={e => { (e.currentTarget as HTMLElement).style.opacity = "0.78"; (e.currentTarget as HTMLElement).style.transform = "scale(1.04)"; }}
             onMouseOut={e => { (e.currentTarget as HTMLElement).style.opacity = "1"; (e.currentTarget as HTMLElement).style.transform = "scale(1)"; }}>
@@ -905,10 +985,10 @@ function Precios({ mode, region }: { mode: Mode; region: Region }) {
       </div>
     </section>
   );
-}
+});
 
 /* ─── Contacto ────────────────────────────────────────────── */
-function Contacto({ mode, region }: { mode: Mode; region: Region }) {
+const Contacto = memo(function Contacto({ mode, region }: { mode: Mode; region: Region }) {
   const d       = mode === "digital";
   const bg      = d ? "#0a0a0a" : "#fff";
   const text    = d ? "#fff" : "#0f0d08";
@@ -919,8 +999,8 @@ function Contacto({ mode, region }: { mode: Mode; region: Region }) {
   const t       = T[region].contact;
   const [msg, setMsg] = useState("");
 
-  const leftRef  = useReveal("left", 0);
-  const rightRef = useReveal("right", 0.1);
+  const left  = useReveal("left", 0);
+  const right = useReveal("right", 0.1);
 
   const waFull = msg.trim()
     ? `${T[region].wa_msg.contact}\n\n${msg.trim()}`
@@ -928,14 +1008,14 @@ function Contacto({ mode, region }: { mode: Mode; region: Region }) {
 
   return (
     <section id="contacto" style={{ background: bg, borderTop: `1px solid ${border}`, transition: "background 0.5s" }}>
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "100px 24px" }}>
+      <div className="section-wrap" style={{ maxWidth: 1100, margin: "0 auto" }}>
         <div style={{ display: "grid" }} className="contact-grid">
 
           {/* Left */}
-          <div ref={leftRef}>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, letterSpacing: "0.5em", textTransform: "uppercase", color: muted, marginBottom: 20 }}>{t.eyebrow}</p>
-            <h2 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 900, fontSize: "clamp(38px,5.5vw,72px)", letterSpacing: "-0.03em", textTransform: "uppercase", color: text, lineHeight: 1.05, marginBottom: 24, whiteSpace: "pre-line" }}>{t.title}</h2>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, lineHeight: 1.8, fontWeight: 300, color: muted, maxWidth: 380, marginBottom: 40 }}>{t.desc}</p>
+          <div ref={left.ref} style={left.style}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, letterSpacing: "0.5em", textTransform: "uppercase", color: muted, marginBottom: 20, transition: "color 0.4s ease" }}>{t.eyebrow}</p>
+            <h2 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 900, fontSize: "clamp(38px,5.5vw,72px)", letterSpacing: "-0.03em", textTransform: "uppercase", color: text, lineHeight: 1.05, marginBottom: 24, whiteSpace: "pre-line", transition: "color 0.4s ease" }}>{t.title}</h2>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, lineHeight: 1.8, fontWeight: 300, color: muted, maxWidth: 380, marginBottom: 40, transition: "color 0.4s ease" }}>{t.desc}</p>
             <div style={{ display: "flex", flexDirection: "column", gap: 14, fontFamily: "'Inter',sans-serif", fontSize: 11, color: muted }}>
               <span style={{ letterSpacing: "0.14em", textTransform: "uppercase" }}>{t.location}</span>
               <a href={`mailto:${email}`} style={{ color: muted, textDecoration: "none" }}>{email}</a>
@@ -944,7 +1024,7 @@ function Contacto({ mode, region }: { mode: Mode; region: Region }) {
           </div>
 
           {/* Right */}
-          <div ref={rightRef}>
+          <div ref={right.ref} style={right.style}>
             <div style={{ background: d ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.02)", border: `1px solid ${border}`, borderRadius: 24, padding: 32 }}>
               <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, letterSpacing: "0.4em", textTransform: "uppercase", color: muted, marginBottom: 20 }}>
                 {region === "MX" ? "Tu mensaje" : "Your message"}
@@ -995,10 +1075,10 @@ function Contacto({ mode, region }: { mode: Mode; region: Region }) {
       `}</style>
     </section>
   );
-}
+});
 
 /* ─── Footer ─────────────────────────────────────────────── */
-function Footer({ mode, region }: { mode: Mode; region: Region }) {
+const Footer = memo(function Footer({ mode, region }: { mode: Mode; region: Region }) {
   const d    = mode === "digital";
   const text = d ? "rgba(255,255,255,0.18)" : "rgba(184,145,42,0.5)";
   const bdr  = d ? "rgba(255,255,255,0.05)" : GOLD_BORDER;
@@ -1015,7 +1095,7 @@ function Footer({ mode, region }: { mode: Mode; region: Region }) {
       </div>
     </footer>
   );
-}
+});
 
 /* ─── Root ───────────────────────────────────────────────── */
 export default function Home() {
@@ -1023,10 +1103,25 @@ export default function Home() {
   const [region, setRegion] = useState<Region>("MX");
   const [scrollY, setScrollY] = useState(0);
 
+  /* Scroll throttleado con rAF: antes cada pixel de scroll re-renderizaba
+     TODA la página (Hero, Nosotros, Precios, Contacto...), lo cual en
+     móvil "ahogaba" el hilo principal y hacía que ninguna animación se
+     viera fluida. Con memo() en los hijos + esto, solo Nav y el
+     RegionSwitcher se actualizan en cada frame de scroll. */
   useEffect(() => {
-    const h = () => setScrollY(window.scrollY);
-    window.addEventListener("scroll", h, { passive: true });
-    return () => window.removeEventListener("scroll", h);
+    let raf = 0;
+    const handle = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        setScrollY(window.scrollY);
+        raf = 0;
+      });
+    };
+    window.addEventListener("scroll", handle, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handle);
+      if (raf) cancelAnimationFrame(raf);
+    };
   }, []);
 
   const scrollTo = useCallback((id: string) => {
