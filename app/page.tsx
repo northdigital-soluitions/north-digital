@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState, useCallback, memo } from "react";
  
-const WA_NUMBER = "522287775402";
+const WA_NUMBER = "522283145334";
 const IG_USER   = "northdigital.mx";
 const EMAIL_D   = "northdigital.mx@gmail.com";
 const EMAIL_S   = "hola@northstudio.mx";
