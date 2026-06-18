@@ -1,16 +1,16 @@
 "use client";
- 
+
 import Image from "next/image";
 import { useEffect, useRef, useState, useCallback, memo } from "react";
- 
+
 const WA_NUMBER = "522283145334";
 const IG_USER   = "northdigital.mx";
 const EMAIL_D   = "northdigital.mx@gmail.com";
 const EMAIL_S   = "hola@northstudio.mx";
- 
+
 type Mode   = "digital" | "studio";
 type Region = "MX" | "US";
- 
+
 const T = {
   MX: {
     nav: { about: "nosotros", pricing: "precios", contact: "contacto" },
@@ -41,8 +41,10 @@ const T = {
       desc2_s: "Cada diseño cuenta una historia — la tuya. Trabajamos contigo para que cada pieza refleje exactamente la vibra que buscas: elegante, divertida, moderna o íntima.",
       values_s: ["Diseño", "Creatividad", "Personalización", "Calidez"],
       team_label: "Nuestro equipo",
-      team_intro_d: "Somos un equipo multidisciplinario que combina dominio técnico en desarrollo y automatización con visión estratégica de marketing y comunicación. Trabajamos con enfoque en resultados, atención personalizada y capacidad de operar tanto en español como en inglés — nivel B2/C1 — para proyectos locales e internacionales.",
-      team_intro_s: "Somos un equipo creativo que fusiona sensibilidad estética con precisión técnica. Cada proyecto es tratado con criterio propio y atención al detalle, y contamos con capacidad bilingüe — español e inglés (B2/C1) — para atender proyectos con alcance internacional.",
+      team_title_d: "Tecnología con\nvisión estratégica",
+      team_title_s: "Creatividad con\nprecisión técnica",
+      team_intro_d: "Somos un equipo multidisciplinario que combina dominio técnico en desarrollo y automatización con visión estratégica de marketing y comunicación. Operamos con enfoque en resultados, atención personalizada y capacidad bilingüe — español e inglés (B2/C1) — para proyectos locales e internacionales.",
+      team_intro_s: "Somos un equipo creativo que fusiona sensibilidad estética con precisión técnica. Cada proyecto recibe criterio propio y atención al detalle, con capacidad bilingüe — español e inglés (B2/C1) — para proyectos con alcance internacional.",
       team_pillars_d: [
         { icon: "⚙️", label: "Tecnología & Desarrollo", desc: "Infraestructura digital a medida: sitios web, automatizaciones y aplicaciones construidas para escalar." },
         { icon: "◈", label: "Marketing & Estrategia", desc: "Posicionamiento de marca, gestión de redes sociales y comunicación orientada a resultados reales." },
@@ -109,6 +111,8 @@ const T = {
       desc2_s: "Every design tells a story — yours. We work with you so each piece reflects exactly the vibe you're after: elegant, fun, modern, or intimate.",
       values_s: ["Design", "Creativity", "Personalization", "Warmth"],
       team_label: "Our team",
+      team_title_d: "Technology with\nstrategic vision",
+      team_title_s: "Creativity with\ntechnical precision",
       team_intro_d: "We are a multidisciplinary team combining technical expertise in software development and automation with strategic vision in marketing and communication. We work with a results-driven approach, personalized attention, and full bilingual capacity — Spanish and English (B2/C1) — to serve both local and international clients.",
       team_intro_s: "We are a creative team that blends aesthetic sensibility with technical precision. Every project is handled with intention and attention to detail, and we operate with full bilingual capacity — Spanish and English (B2/C1) — to support projects with international reach.",
       team_pillars_d: [
@@ -149,100 +153,100 @@ const T = {
     },
   },
 };
- 
-type PriceRow     = { label_MX: string; label_US: string; mxn: string; usd: string };
+
+type PriceRow     = { label_MX: string; label_US: string; mxn: string; usd: string; desc_MX?: string; desc_US?: string };
 type PriceSection = { title_MX: string; title_US: string; rows: PriceRow[]; icon: string };
- 
+
 const DIGITAL_SECTIONS: PriceSection[] = [
   {
     title_MX: "Desarrollo web", title_US: "Web development", icon: "🌐",
     rows: [
-      { label_MX: "Landing page — sin fotos",                              label_US: "Landing page — no photos",                     mxn: "$1,499 MXN", usd: "$80 USD"  },
-      { label_MX: "Landing page — con sesión fotográfica",                 label_US: "Landing page — with photo session",            mxn: "$1,999 MXN", usd: "$150 USD" },
-      { label_MX: "Página web · catálogo 1–30 productos",                  label_US: "Website · catalog 1–30 products",              mxn: "$1,999 MXN", usd: "$280 USD" },
-      { label_MX: "Página web · catálogo 31–60 productos",                 label_US: "Website · catalog 31–60 products",             mxn: "$3,499 MXN", usd: "$450 USD" },
-      { label_MX: "Página web · catálogo 61–90 productos",                 label_US: "Website · catalog 61–90 products",             mxn: "$4,999 MXN", usd: "$650 USD" },
-      { label_MX: "Página web · catálogo 90+ productos",                   label_US: "Website · catalog 90+ products",               mxn: "$5,999 MXN", usd: "$800 USD" },
-      { label_MX: "+ Sesión fotográfica (1–2 hrs)",                        label_US: "+ Photo session (1–2 hrs)",                    mxn: "+$799 MXN",  usd: "+$60 USD" },
-      { label_MX: "+ Dominio propio (.com / .mx)",                         label_US: "+ Custom domain (.com)",                       mxn: "+$299/año",  usd: "+$20/yr"  },
+      { label_MX: "Landing page — sin fotos",                              label_US: "Landing page — no photos",                     mxn: "$1,499 MXN", usd: "$80 USD",  desc_MX: "Página de presentación de una sola sección, diseño limpio y responsivo, sin sesión fotográfica incluida.", desc_US: "Single-section presentation page, clean responsive design, no photo session included." },
+      { label_MX: "Landing page — con sesión fotográfica",                 label_US: "Landing page — with photo session",            mxn: "$1,999 MXN", usd: "$150 USD", desc_MX: "Landing page completa más sesión fotográfica de producto o equipo de 1–2 horas para enriquecer el contenido visual.", desc_US: "Full landing page plus a 1–2 hour product or team photo session to enrich the visual content." },
+      { label_MX: "Página web · catálogo 1–30 productos",                  label_US: "Website · catalog 1–30 products",              mxn: "$1,999 MXN", usd: "$280 USD", desc_MX: "Sitio web completo con catálogo de hasta 30 productos, diseño responsivo y panel de administración básico.", desc_US: "Full website with catalog of up to 30 products, responsive design, and basic admin panel." },
+      { label_MX: "Página web · catálogo 31–60 productos",                 label_US: "Website · catalog 31–60 products",             mxn: "$3,499 MXN", usd: "$450 USD", desc_MX: "Sitio web con catálogo de 31 a 60 productos, filtros por categoría y diseño optimizado para conversión.", desc_US: "Website with 31–60 product catalog, category filters, and conversion-optimized design." },
+      { label_MX: "Página web · catálogo 61–90 productos",                 label_US: "Website · catalog 61–90 products",             mxn: "$4,999 MXN", usd: "$650 USD", desc_MX: "Sitio web robusto para catálogos de 61 a 90 productos con búsqueda avanzada y diseño de alto rendimiento.", desc_US: "Robust website for 61–90 product catalogs with advanced search and high-performance design." },
+      { label_MX: "Página web · catálogo 90+ productos",                   label_US: "Website · catalog 90+ products",               mxn: "$5,999 MXN", usd: "$800 USD", desc_MX: "Plataforma web escalable para más de 90 productos, con arquitectura optimizada para SEO y gestión de inventario.", desc_US: "Scalable web platform for 90+ products with SEO-optimized architecture and inventory management." },
+      { label_MX: "+ Sesión fotográfica (1–2 hrs)",                        label_US: "+ Photo session (1–2 hrs)",                    mxn: "+$799 MXN",  usd: "+$60 USD", desc_MX: "Sesión fotográfica adicional de producto, espacio o equipo de 1 a 2 horas para complementar cualquier proyecto web.", desc_US: "Additional 1–2 hour product, space, or team photo session to complement any web project." },
+      { label_MX: "+ Dominio propio (.com / .mx)",                         label_US: "+ Custom domain (.com)",                       mxn: "+$299/año",  usd: "+$20/yr",  desc_MX: "Registro y configuración de tu dominio personalizado (.com o .mx) con renovación anual incluida el primer año.", desc_US: "Registration and setup of your custom domain (.com) with first-year annual renewal included." },
     ],
   },
   {
     title_MX: "Aplicaciones y automatización", title_US: "Apps & automation", icon: "⚙️",
     rows: [
-      { label_MX: "Excel — hoja simple con fórmulas",                      label_US: "Excel — simple sheet with formulas",           mxn: "$799 MXN",   usd: "$100 USD" },
-      { label_MX: "Excel — dashboard con reportes",                        label_US: "Excel — dashboard with reports",               mxn: "$1,499 MXN", usd: "$200 USD" },
-      { label_MX: "Excel — sistema completo de inventario",                label_US: "Excel — full inventory system",                mxn: "$2,499 MXN", usd: "$350 USD" },
-      { label_MX: "App de escritorio C# — básica",                        label_US: "C# desktop app — basic",                       mxn: "$2,999 MXN", usd: "$200 USD" },
-      { label_MX: "App de escritorio C# — completa",                      label_US: "C# desktop app — full",                        mxn: "$3,999 MXN", usd: "$300 USD" },
+      { label_MX: "Excel — hoja simple con fórmulas",                      label_US: "Excel — simple sheet with formulas",           mxn: "$799 MXN",   usd: "$100 USD", desc_MX: "Hoja de cálculo personalizada con fórmulas automáticas para control de ventas, gastos o inventario básico.", desc_US: "Custom spreadsheet with automatic formulas for sales tracking, expenses, or basic inventory." },
+      { label_MX: "Excel — dashboard con reportes",                        label_US: "Excel — dashboard with reports",               mxn: "$1,499 MXN", usd: "$200 USD", desc_MX: "Dashboard visual con gráficas y reportes automáticos para análisis de datos de tu negocio en tiempo real.", desc_US: "Visual dashboard with charts and automatic reports for real-time business data analysis." },
+      { label_MX: "Excel — sistema completo de inventario",                label_US: "Excel — full inventory system",                mxn: "$2,499 MXN", usd: "$350 USD", desc_MX: "Sistema integral de inventario con entradas, salidas, alertas de stock bajo y reportes mensuales automáticos.", desc_US: "Comprehensive inventory system with entries, exits, low-stock alerts, and automatic monthly reports." },
+      { label_MX: "App de escritorio C# — básica",                        label_US: "C# desktop app — basic",                       mxn: "$2,999 MXN", usd: "$200 USD", desc_MX: "Aplicación de escritorio desarrollada en C# para Windows, con funcionalidades esenciales según tu necesidad.", desc_US: "Windows desktop application developed in C# with essential functionalities tailored to your needs." },
+      { label_MX: "App de escritorio C# — completa",                      label_US: "C# desktop app — full",                        mxn: "$3,999 MXN", usd: "$300 USD", desc_MX: "Aplicación completa de escritorio en C# con base de datos local, reportes, múltiples usuarios y soporte incluido.", desc_US: "Full C# desktop application with local database, reports, multi-user support, and included support." },
     ],
   },
   {
     title_MX: "Diseño e identidad", title_US: "Design & identity", icon: "✦",
     rows: [
-      { label_MX: "Identidad visual básica (logo + paleta + tipografía)",  label_US: "Basic visual identity (logo + palette + type)", mxn: "$1,199 MXN", usd: "$180 USD" },
-      { label_MX: "+ Material para redes (3 plantillas)",                  label_US: "+ Social media templates (3 pieces)",           mxn: "+$499 MXN",  usd: "+$80 USD" },
+      { label_MX: "Identidad visual básica (logo + paleta + tipografía)",  label_US: "Basic visual identity (logo + palette + type)", mxn: "$1,199 MXN", usd: "$180 USD", desc_MX: "Paquete de identidad visual con logotipo, paleta de color oficial y sistema tipográfico listo para aplicar.", desc_US: "Visual identity package including logo, official color palette, and typography system ready to apply." },
+      { label_MX: "+ Material para redes (3 plantillas)",                  label_US: "+ Social media templates (3 pieces)",           mxn: "+$499 MXN",  usd: "+$80 USD", desc_MX: "Tres plantillas editables para redes sociales adaptadas a tu identidad visual, listas para publicar.", desc_US: "Three editable social media templates adapted to your visual identity, ready to publish." },
     ],
   },
   {
     title_MX: "Suscripciones mensuales", title_US: "Monthly subscriptions", icon: "↺",
     rows: [
-      { label_MX: "Mantenimiento web (actualizaciones + soporte)",         label_US: "Web maintenance (updates + support)",          mxn: "$399/mes",   usd: "$60/mo"   },
-      { label_MX: "Redes sociales — 12 posts/mes",                        label_US: "Social media — 12 posts/month",                mxn: "$999/mes",   usd: "$150/mo"  },
-      { label_MX: "Redes sociales + sesión fotográfica mensual",           label_US: "Social media + monthly photo session",         mxn: "$1,599/mes", usd: "$180/mo"  },
-      { label_MX: "Plan completo (web + redes + foto)",                    label_US: "Full plan (web + social + photo)",             mxn: "$2,499/mes", usd: "$249/mo"  },
+      { label_MX: "Mantenimiento web (actualizaciones + soporte)",         label_US: "Web maintenance (updates + support)",          mxn: "$399/mes",   usd: "$60/mo",   desc_MX: "Actualizaciones mensuales de contenido, soporte técnico prioritario y monitoreo de tu sitio web.", desc_US: "Monthly content updates, priority technical support, and monitoring of your website." },
+      { label_MX: "Redes sociales — 12 posts/mes",                        label_US: "Social media — 12 posts/month",                mxn: "$999/mes",   usd: "$150/mo",  desc_MX: "Gestión de redes sociales con 12 publicaciones mensuales diseñadas y programadas con estrategia de contenido.", desc_US: "Social media management with 12 monthly posts designed and scheduled with content strategy." },
+      { label_MX: "Redes sociales + sesión fotográfica mensual",           label_US: "Social media + monthly photo session",         mxn: "$1,599/mes", usd: "$180/mo",  desc_MX: "Plan de redes con 12 posts más una sesión fotográfica mensual para contenido siempre fresco y original.", desc_US: "Social plan with 12 posts plus a monthly photo session for always-fresh, original content." },
+      { label_MX: "Plan completo (web + redes + foto)",                    label_US: "Full plan (web + social + photo)",             mxn: "$2,499/mes", usd: "$249/mo",  desc_MX: "Paquete todo incluido: mantenimiento web, gestión de redes sociales y sesión fotográfica mensual.", desc_US: "All-inclusive package: web maintenance, social media management, and monthly photo session." },
     ],
   },
 ];
- 
+
 const STUDIO_SECTIONS: PriceSection[] = [
   {
     title_MX: "Invitaciones digitales", title_US: "Digital invitations", icon: "✉",
     rows: [
-      { label_MX: "Invitación estática — diseño sencillo",                 label_US: "Static invitation — simple design",            mxn: "$169 MXN",   usd: "$20 USD"  },
-      { label_MX: "Invitación estática — diseño elaborado (2–3 pantallas)",label_US: "Static invitation — elaborate (2–3 screens)",  mxn: "$249 MXN",   usd: "$30 USD"  },
-      { label_MX: "Invitación con animación básica",                       label_US: "Invitation with basic animation",              mxn: "$279 MXN",   usd: "$35 USD"  },
-      { label_MX: "Invitación con video elaborado",                        label_US: "Invitation with elaborate video",              mxn: "$349 MXN",   usd: "$45 USD"  },
+      { label_MX: "Invitación estática — diseño sencillo",                 label_US: "Static invitation — simple design",            mxn: "$169 MXN",   usd: "$20 USD",  desc_MX: "Invitación digital estática con diseño limpio de una sola pantalla, lista para compartir por WhatsApp.", desc_US: "Static digital invitation with clean single-screen design, ready to share via WhatsApp." },
+      { label_MX: "Invitación estática — diseño elaborado (2–3 pantallas)",label_US: "Static invitation — elaborate (2–3 screens)",  mxn: "$249 MXN",   usd: "$30 USD",  desc_MX: "Invitación con diseño detallado en 2 a 3 pantallas, perfecta para eventos donde el estilo importa.", desc_US: "Invitation with detailed design across 2–3 screens, perfect for events where style matters." },
+      { label_MX: "Invitación con animación básica",                       label_US: "Invitation with basic animation",              mxn: "$279 MXN",   usd: "$35 USD",  desc_MX: "Invitación digital animada con transiciones suaves que dan vida al diseño y sorprenden al invitado.", desc_US: "Animated digital invitation with smooth transitions that bring the design to life." },
+      { label_MX: "Invitación con video elaborado",                        label_US: "Invitation with elaborate video",              mxn: "$349 MXN",   usd: "$45 USD",  desc_MX: "Invitación en formato video con animaciones elaboradas, música de fondo y efectos cinematográficos.", desc_US: "Video-format invitation with elaborate animations, background music, and cinematic effects." },
     ],
   },
   {
     title_MX: "Presentaciones", title_US: "Presentations", icon: "▣",
     rows: [
-      { label_MX: "Hasta 10 diapositivas — sin movimiento",                label_US: "Up to 10 slides — no animation",               mxn: "$499 MXN",   usd: "$65 USD"  },
-      { label_MX: "Hasta 10 diapositivas — con movimiento",                label_US: "Up to 10 slides — animated",                   mxn: "$699 MXN",   usd: "$90 USD"  },
-      { label_MX: "11–20 diapositivas — sin movimiento",                   label_US: "11–20 slides — no animation",                  mxn: "$799 MXN",   usd: "$110 USD" },
-      { label_MX: "11–20 diapositivas — con movimiento",                   label_US: "11–20 slides — animated",                      mxn: "$999 MXN",   usd: "$135 USD" },
-      { label_MX: "20+ diapositivas — con movimiento",                     label_US: "20+ slides — animated",                        mxn: "$1,199 MXN", usd: "$160 USD" },
+      { label_MX: "Hasta 10 diapositivas — sin movimiento",                label_US: "Up to 10 slides — no animation",               mxn: "$499 MXN",   usd: "$65 USD",  desc_MX: "Presentación estática de hasta 10 diapositivas con diseño profesional y jerarquía visual clara.", desc_US: "Static presentation of up to 10 slides with professional design and clear visual hierarchy." },
+      { label_MX: "Hasta 10 diapositivas — con movimiento",                label_US: "Up to 10 slides — animated",                   mxn: "$699 MXN",   usd: "$90 USD",  desc_MX: "Presentación animada de hasta 10 diapositivas con transiciones y efectos que mantienen la atención.", desc_US: "Animated presentation of up to 10 slides with transitions and effects that hold attention." },
+      { label_MX: "11–20 diapositivas — sin movimiento",                   label_US: "11–20 slides — no animation",                  mxn: "$799 MXN",   usd: "$110 USD", desc_MX: "Presentación estática de 11 a 20 diapositivas, ideal para pitch decks, portafolios o informes.", desc_US: "Static presentation of 11–20 slides, ideal for pitch decks, portfolios, or reports." },
+      { label_MX: "11–20 diapositivas — con movimiento",                   label_US: "11–20 slides — animated",                      mxn: "$999 MXN",   usd: "$135 USD", desc_MX: "Presentación animada de 11 a 20 diapositivas, con narrativa visual que impacta desde la primera slide.", desc_US: "Animated presentation of 11–20 slides with visual narrative that impacts from the first slide." },
+      { label_MX: "20+ diapositivas — con movimiento",                     label_US: "20+ slides — animated",                        mxn: "$1,199 MXN", usd: "$160 USD", desc_MX: "Presentación completa de más de 20 diapositivas animadas para proyectos de gran escala o eventos.", desc_US: "Full presentation of 20+ animated slides for large-scale projects or events." },
     ],
   },
   {
     title_MX: "Flyers y redes sociales", title_US: "Flyers & social media", icon: "◈",
     rows: [
-      { label_MX: "Post / flyer estático — pieza individual",              label_US: "Static post / flyer — single piece",           mxn: "$99 MXN",    usd: "$15 USD"  },
-      { label_MX: "Post / flyer estático — paquete 5 piezas",             label_US: "Static post / flyer — 5-piece bundle",         mxn: "$399 MXN",   usd: "$55 USD"  },
-      { label_MX: "Post / flyer estático — paquete 10 piezas",            label_US: "Static post / flyer — 10-piece bundle",        mxn: "$699 MXN",   usd: "$100 USD" },
-      { label_MX: "Post animado — pieza individual",                       label_US: "Animated post — single piece",                 mxn: "$199 MXN",   usd: "$28 USD"  },
-      { label_MX: "Post animado — paquete 5 piezas",                      label_US: "Animated post — 5-piece bundle",               mxn: "$799 MXN",   usd: "$110 USD" },
-      { label_MX: "Post animado — paquete 10 piezas",                     label_US: "Animated post — 10-piece bundle",              mxn: "$1,499 MXN", usd: "$200 USD" },
+      { label_MX: "Post / flyer estático — pieza individual",              label_US: "Static post / flyer — single piece",           mxn: "$99 MXN",    usd: "$15 USD",  desc_MX: "Diseño de una sola pieza estática para publicación en redes sociales o impresión en formato flyer.", desc_US: "Single static piece design for social media posting or flyer print format." },
+      { label_MX: "Post / flyer estático — paquete 5 piezas",             label_US: "Static post / flyer — 5-piece bundle",         mxn: "$399 MXN",   usd: "$55 USD",  desc_MX: "Paquete de 5 piezas estáticas con coherencia visual entre ellas, ideal para una campaña o temporada.", desc_US: "5-piece static bundle with visual coherence, ideal for a campaign or seasonal content." },
+      { label_MX: "Post / flyer estático — paquete 10 piezas",            label_US: "Static post / flyer — 10-piece bundle",        mxn: "$699 MXN",   usd: "$100 USD", desc_MX: "10 piezas estáticas con identidad unificada, perfectas para un mes completo de contenido de marca.", desc_US: "10 static pieces with unified identity, perfect for a full month of branded content." },
+      { label_MX: "Post animado — pieza individual",                       label_US: "Animated post — single piece",                 mxn: "$199 MXN",   usd: "$28 USD",  desc_MX: "Pieza animada individual que captura la atención en el feed, con movimiento fluido y branding consistente.", desc_US: "Single animated piece that captures feed attention, with smooth motion and consistent branding." },
+      { label_MX: "Post animado — paquete 5 piezas",                      label_US: "Animated post — 5-piece bundle",               mxn: "$799 MXN",   usd: "$110 USD", desc_MX: "5 piezas animadas con diseño coherente entre ellas, listas para elevar la presencia visual de tu marca.", desc_US: "5 animated pieces with cohesive design, ready to elevate your brand's visual presence." },
+      { label_MX: "Post animado — paquete 10 piezas",                     label_US: "Animated post — 10-piece bundle",              mxn: "$1,499 MXN", usd: "$200 USD", desc_MX: "10 piezas animadas con estrategia de contenido integrada, ideal para marcas que quieren destacar cada semana.", desc_US: "10 animated pieces with integrated content strategy, ideal for brands that want to stand out weekly." },
     ],
   },
   {
     title_MX: "Menú digital para restaurante", title_US: "Digital restaurant menu", icon: "◉",
     rows: [
-      { label_MX: "Hasta 20 platillos",                                    label_US: "Up to 20 dishes",                              mxn: "$399 MXN",   usd: "$55 USD"  },
-      { label_MX: "21–50 platillos",                                       label_US: "21–50 dishes",                                 mxn: "$699 MXN",   usd: "$95 USD"  },
+      { label_MX: "Hasta 20 platillos",                                    label_US: "Up to 20 dishes",                              mxn: "$399 MXN",   usd: "$55 USD",  desc_MX: "Menú digital de hasta 20 platillos con diseño acorde a la identidad del restaurante, accesible por QR.", desc_US: "Digital menu of up to 20 dishes designed to match the restaurant's identity, accessible via QR." },
+      { label_MX: "21–50 platillos",                                       label_US: "21–50 dishes",                                 mxn: "$699 MXN",   usd: "$95 USD",  desc_MX: "Menú digital de 21 a 50 platillos con secciones organizadas, fotografías opcionales y acceso por código QR.", desc_US: "Digital menu of 21–50 dishes with organized sections, optional photos, and QR code access." },
     ],
   },
 ];
- 
+
 const GOLD        = "#B8912A";
 const GOLD_BORDER = "rgba(184,145,42,0.25)";
- 
+
 const GLOBAL_CSS = `
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body { background: #000; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
- 
+
   @media (max-width: 480px) { .nav-links { display: none !important; } }
   @media (max-width: 768px) {
     .nav-links      { display: none !important; }
@@ -254,51 +258,57 @@ const GLOBAL_CSS = `
   @media (prefers-reduced-motion: reduce) {
     * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
   }
- 
+
   .nav-inner { padding: 14px 16px; }
   @media (min-width: 769px) {
     .nav-inner { padding: 14px 24px 14px 108px; }
   }
- 
+
   .mode-pill-desktop { display: flex; }
   @media (max-width: 768px) {
     .mode-pill-desktop { display: none !important; }
   }
- 
+
   .region-switcher { position: fixed; top: 16px; left: 16px; z-index: 100; }
   @media (max-width: 768px) {
     .region-switcher       { left: auto; right: 12px; top: 12px; }
     .region-switcher-label { display: none; }
   }
- 
+
   .section-wrap { padding: 100px 24px; }
   @media (max-width: 768px) {
     .section-wrap { padding: 64px 20px; }
   }
- 
+
   @media (max-width: 480px) {
     .mode-banner-half { padding: 38px 18px !important; }
   }
- 
+
   @keyframes scrollBounce {
     0%,100% { opacity: 0.22; transform: translateX(-50%) translateY(0px); }
     55%      { opacity: 0.50; transform: translateX(-50%) translateY(7px); }
   }
- 
+
   @keyframes modeFadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to   { opacity: 1; transform: translateY(0); }
   }
- 
+
   @keyframes navIn {
     from { opacity: 0; transform: translateY(-5px); }
     to   { opacity: 1; transform: translateY(0); }
   }
- 
-  .price-row { transition: background 0.18s; }
-  .price-row:hover { background: rgba(0,0,0,0.025) !important; }
-  .price-row-gold:hover { background: rgba(184,145,42,0.04) !important; }
- 
+
+  @keyframes priceModalIn {
+    from { opacity: 0; transform: scale(0.94) translateY(16px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .price-row { transition: background 0.18s; cursor: pointer; }
+  .price-row:hover { background: rgba(0,0,0,0.045) !important; }
+  .price-row-gold { transition: background 0.18s; cursor: pointer; }
+  .price-row-gold:hover { background: rgba(184,145,42,0.07) !important; }
+
   .msg-textarea { resize: vertical; }
   .msg-textarea:focus { outline: none; }
   .msg-textarea-d:focus { border-color: rgba(255,255,255,0.3) !important; }
@@ -306,74 +316,223 @@ const GLOBAL_CSS = `
   .msg-textarea-d::placeholder { color: rgba(255,255,255,0.2); }
   .msg-textarea-s::placeholder { color: rgba(184,145,42,0.35); }
 `;
- 
+
+/* ─── PRICE MODAL ───────────────────────────────────────────────── */
+interface PriceModalProps {
+  row: PriceRow;
+  d: boolean;
+  region: Region;
+  onClose: () => void;
+}
+
+function PriceModal({ row, d, region, onClose }: PriceModalProps) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setMounted(true), 10);
+    const h = (e: KeyboardEvent) => { if (e.key === "Escape") handleClose(); };
+    window.addEventListener("keydown", h);
+    return () => { clearTimeout(t); window.removeEventListener("keydown", h); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleClose = () => {
+    setMounted(false);
+    setTimeout(onClose, 280);
+  };
+
+  const label = region === "MX" ? row.label_MX : row.label_US;
+  const price = region === "MX" ? row.mxn : row.usd;
+  const desc  = region === "MX" ? (row.desc_MX ?? "") : (row.desc_US ?? "");
+
+  const waText = region === "MX"
+    ? `¡Hola! Me gustaría cotizar: ${label} (${price}).`
+    : `Hi! I'd like to quote: ${label} (${price}).`;
+
+  return (
+    <div
+      onClick={handleClose}
+      style={{
+        position: "fixed", inset: 0, zIndex: 200,
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: "20px",
+        background: mounted ? "rgba(0,0,0,0.6)" : "rgba(0,0,0,0)",
+        backdropFilter: mounted ? "blur(8px)" : "blur(0px)",
+        transition: "background 0.28s ease, backdrop-filter 0.28s ease",
+      }}
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        style={{
+          background: d ? "#111" : "#fff",
+          border: d ? "1px solid rgba(255,255,255,0.1)" : `1px solid ${GOLD_BORDER}`,
+          borderRadius: 24,
+          padding: "40px 36px",
+          maxWidth: 440,
+          width: "100%",
+          boxShadow: d ? "0 32px 80px rgba(0,0,0,0.7)" : "0 24px 64px rgba(0,0,0,0.12)",
+          animation: mounted ? "priceModalIn 0.32s cubic-bezier(0.22,1,0.36,1) both" : "none",
+          position: "relative",
+        }}
+      >
+        {/* close btn */}
+        <button
+          onClick={handleClose}
+          style={{
+            position: "absolute", top: 18, right: 18,
+            width: 32, height: 32, borderRadius: "50%",
+            background: d ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.06)",
+            border: "none", cursor: "pointer", color: d ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.4)",
+            fontSize: 18, display: "flex", alignItems: "center", justifyContent: "center",
+            transition: "background 0.18s",
+          }}
+          onMouseOver={e => (e.currentTarget as HTMLElement).style.background = d ? "rgba(255,255,255,0.14)" : "rgba(0,0,0,0.1)"}
+          onMouseOut={e => (e.currentTarget as HTMLElement).style.background = d ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.06)"}
+        >×</button>
+
+        {/* eyebrow */}
+        <p style={{
+          fontFamily: "'Inter',sans-serif", fontSize: 9, letterSpacing: "0.5em",
+          textTransform: "uppercase", color: d ? "rgba(255,255,255,0.3)" : GOLD,
+          marginBottom: 18,
+        }}>
+          {region === "MX" ? "Servicio" : "Service"}
+        </p>
+
+        {/* service name */}
+        <h3 style={{
+          fontFamily: "'Inter',sans-serif", fontWeight: 700,
+          fontSize: 18, lineHeight: 1.35, letterSpacing: "-0.01em",
+          color: d ? "#fff" : "#0f0d08",
+          marginBottom: 28,
+          paddingRight: 28,
+        }}>{label}</h3>
+
+        {/* divider */}
+        <div style={{
+          height: 1,
+          background: d ? "rgba(255,255,255,0.07)" : GOLD_BORDER,
+          marginBottom: 28,
+        }} />
+
+        {/* price */}
+        <p style={{
+          fontFamily: "'Inter',sans-serif", fontWeight: 900,
+          fontSize: "clamp(44px,10vw,68px)", letterSpacing: "-0.04em",
+          color: d ? "#fff" : "#0f0d08",
+          lineHeight: 1,
+          marginBottom: 24,
+        }}>{price}</p>
+
+        {/* description */}
+        {desc && (
+          <p style={{
+            fontFamily: "'Inter',sans-serif", fontSize: 13,
+            lineHeight: 1.78, fontWeight: 300,
+            color: d ? "rgba(255,255,255,0.5)" : "rgba(15,13,8,0.55)",
+            marginBottom: 32,
+          }}>{desc}</p>
+        )}
+
+        {/* CTA */}
+        <a
+          href={`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(waText)}`}
+          target="_blank" rel="noopener noreferrer"
+          style={{
+            display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+            width: "100%", padding: "15px 28px", borderRadius: 100,
+            background: "#25d366", color: "#fff",
+            fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 700,
+            letterSpacing: "0.16em", textTransform: "uppercase",
+            textDecoration: "none", transition: "opacity 0.2s, transform 0.2s",
+          }}
+          onMouseOver={e => { (e.currentTarget as HTMLElement).style.opacity = "0.88"; (e.currentTarget as HTMLElement).style.transform = "scale(1.02)"; }}
+          onMouseOut={e => { (e.currentTarget as HTMLElement).style.opacity = "1"; (e.currentTarget as HTMLElement).style.transform = "scale(1)"; }}
+        >
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+          {region === "MX" ? "Cotizar por WhatsApp" : "Quote via WhatsApp"}
+        </a>
+
+        <button
+          onClick={handleClose}
+          style={{
+            marginTop: 12, width: "100%", padding: "11px",
+            background: "transparent", border: "none", cursor: "pointer",
+            fontFamily: "'Inter',sans-serif", fontSize: 10,
+            letterSpacing: "0.3em", textTransform: "uppercase",
+            color: d ? "rgba(255,255,255,0.25)" : "rgba(0,0,0,0.28)",
+            transition: "color 0.18s",
+          }}
+          onMouseOver={e => (e.currentTarget as HTMLElement).style.color = d ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.55)"}
+          onMouseOut={e => (e.currentTarget as HTMLElement).style.color = d ? "rgba(255,255,255,0.25)" : "rgba(0,0,0,0.28)"}
+        >
+          {region === "MX" ? "Cerrar" : "Close"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ─── useReveal — FIXED: fires on mount if already in view ───── */
 function useReveal(direction: "up" | "left" | "right" = "up", delay = 0) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
- 
+
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
- 
+
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setVisible(true);
       return;
     }
- 
-    const checkImmediate = () => {
-      const rect = el.getBoundingClientRect();
-      if (rect.top < window.innerHeight - 40) {
-        setVisible(true);
-        return true;
-      }
-      return false;
-    };
- 
-    if (checkImmediate()) return;
-    const tick = setTimeout(() => {
-      if (checkImmediate()) return;
-    }, 50);
- 
+
+    const reveal = () => setVisible(true);
+
+    // Check immediately (element may already be in viewport on mount)
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight + 60) {
+      // Small delay so CSS transition has time to register initial state
+      const t = setTimeout(reveal, 60);
+      return () => clearTimeout(t);
+    }
+
+    // Otherwise observe
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setVisible(true);
+          reveal();
           obs.disconnect();
         }
       },
-      {
-        threshold: 0.05,
-        rootMargin: "0px 0px -60px 0px",
-      }
+      { threshold: 0.05, rootMargin: "0px 0px -40px 0px" }
     );
     obs.observe(el);
-    return () => {
-      clearTimeout(tick);
-      obs.disconnect();
-    };
+    return () => obs.disconnect();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
- 
+
   const offset =
     direction === "left"  ? "translateX(-32px)" :
     direction === "right" ? "translateX(32px)"  :
     "translateY(30px)";
- 
+
   const style: React.CSSProperties = {
     opacity:    visible ? 1 : 0,
     transform:  visible ? "translate(0,0)" : offset,
     transition: `opacity 0.75s cubic-bezier(0.22,1,0.36,1) ${delay}s, transform 0.75s cubic-bezier(0.22,1,0.36,1) ${delay}s`,
     willChange: "opacity, transform",
   };
- 
+
   return { ref, style };
 }
- 
+
 function ModeFade({ mode, children }: { mode: Mode; children: string }) {
   const [shown, setShown]     = useState(true);
   const [content, setContent] = useState(children);
   const prevMode = useRef(mode);
- 
+
   useEffect(() => {
     if (prevMode.current === mode) {
       setContent(children);
@@ -388,7 +547,7 @@ function ModeFade({ mode, children }: { mode: Mode; children: string }) {
     return () => clearTimeout(t);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode, children]);
- 
+
   return (
     <span style={{
       display: "inline-block",
@@ -401,7 +560,7 @@ function ModeFade({ mode, children }: { mode: Mode; children: string }) {
     </span>
   );
 }
- 
+
 function Particles({ color }: { color: string }) {
   const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
@@ -443,7 +602,7 @@ function Particles({ color }: { color: string }) {
     <canvas ref={ref} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 0 }} />
   );
 }
- 
+
 function RegionSwitcher({ region, setRegion, mode, shown }: {
   region: Region; setRegion: (r: Region) => void; mode: Mode; shown: boolean;
 }) {
@@ -478,7 +637,7 @@ function RegionSwitcher({ region, setRegion, mode, shown }: {
     </div>
   );
 }
- 
+
 function Nav({ mode, setMode, scrollTo, region, scrollY }: {
   mode: Mode; setMode: (m: Mode) => void; scrollTo: (id: string) => void; region: Region; scrollY: number;
 }) {
@@ -487,7 +646,7 @@ function Nav({ mode, setMode, scrollTo, region, scrollY }: {
   const [mobileOpen, setMobileOpen] = useState(false);
   const d = mode === "digital";
   const t = T[region].nav;
- 
+
   return (
     <nav style={{
       position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
@@ -509,7 +668,7 @@ function Nav({ mode, setMode, scrollTo, region, scrollY }: {
             opacity: scrolled ? 1 : 0.8, transition: "opacity 0.35s, color 0.4s",
           }}>NORTH</span>
         </div>
- 
+
         <div className="nav-links" style={{
           display: "flex", alignItems: "center", gap: 32,
           opacity: linksShown ? 1 : 0,
@@ -531,7 +690,7 @@ function Nav({ mode, setMode, scrollTo, region, scrollY }: {
             </button>
           ))}
         </div>
- 
+
         <div className="mode-pill-desktop" style={{
           padding: "5px", borderRadius: 100,
           background: d ? "rgba(255,255,255,0.07)" : "rgba(184,145,42,0.07)",
@@ -548,13 +707,13 @@ function Nav({ mode, setMode, scrollTo, region, scrollY }: {
             }}>{m === "digital" ? "Digital" : "Studio"}</button>
           ))}
         </div>
- 
+
         <button className="nav-hamburger" onClick={() => setMobileOpen(o => !o)}
           style={{ display: "none", flexDirection: "column", gap: 5, background: "none", border: "none", cursor: "pointer", padding: 8 }}>
           {[0,1,2].map(i => <span key={i} style={{ display: "block", width: 22, height: 2, borderRadius: 2, background: d ? "#fff" : "#0a0a0a" }} />)}
         </button>
       </div>
- 
+
       {mobileOpen && (
         <div style={{
           background: d ? "rgba(0,0,0,0.97)" : "rgba(255,255,255,0.97)",
@@ -588,7 +747,7 @@ function Nav({ mode, setMode, scrollTo, region, scrollY }: {
     </nav>
   );
 }
- 
+
 const Hero = memo(function Hero({ mode, scrollTo, region }: { mode: Mode; scrollTo: (id: string) => void; region: Region }) {
   const d = mode === "digital";
   const [vis, setVis] = useState(false);
@@ -597,10 +756,10 @@ const Hero = memo(function Hero({ mode, scrollTo, region }: { mode: Mode; scroll
     const t = setTimeout(() => setVis(true), 80);
     return () => clearTimeout(t);
   }, [mode]);
- 
+
   const t  = T[region];
   const ht = d ? t.hero.digital : t.hero.studio;
- 
+
   return (
     <section style={{
       position: "relative", minHeight: "100svh",
@@ -609,7 +768,7 @@ const Hero = memo(function Hero({ mode, scrollTo, region }: { mode: Mode; scroll
       transition: "background 0.6s ease",
     }}>
       <Particles color={d ? "#ffffff" : GOLD} />
- 
+
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",
         background: d
@@ -617,7 +776,7 @@ const Hero = memo(function Hero({ mode, scrollTo, region }: { mode: Mode; scroll
           : `radial-gradient(ellipse 60% 50% at 50% 50%, rgba(184,145,42,0.055) 0%, transparent 70%)`,
         transition: "background 0.6s",
       }} />
- 
+
       <div style={{
         position: "absolute", bottom: "8%", left: "50%", transform: "translateX(-50%)",
         fontFamily: "'Inter',sans-serif", fontWeight: 900,
@@ -627,7 +786,7 @@ const Hero = memo(function Hero({ mode, scrollTo, region }: { mode: Mode; scroll
         pointerEvents: "none", userSelect: "none", zIndex: 0,
         transition: "color 0.6s",
       }}>{d ? "DIGITAL" : "STUDIO"}</div>
- 
+
       <div style={{
         position: "relative", zIndex: 10, width: "100%", maxWidth: 700, margin: "0 auto",
         padding: "0 24px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center",
@@ -643,7 +802,7 @@ const Hero = memo(function Hero({ mode, scrollTo, region }: { mode: Mode; scroll
           <Image src="/north_digital_logo.png" alt="North Digital" width={120} height={120}
             style={{ objectFit: "contain", position: "relative" }} />
         </div>
- 
+
         <div style={{ marginBottom: 12, display: "flex", alignItems: "baseline", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
           <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 900, fontSize: "clamp(40px,8vw,88px)", color: d ? "#fff" : "#0f0d08", letterSpacing: "-0.03em", lineHeight: 1 }}>NORTH</span>
           <span style={{
@@ -653,18 +812,18 @@ const Hero = memo(function Hero({ mode, scrollTo, region }: { mode: Mode; scroll
             transition: "color 0.5s",
           }}>{d ? "DIGITAL" : "STUDIO"}</span>
         </div>
- 
+
         <p style={{
           fontFamily: "'Inter',sans-serif", fontSize: 11, letterSpacing: "0.45em", textTransform: "uppercase",
           color: d ? "rgba(255,255,255,0.33)" : "rgba(184,145,42,0.7)", marginBottom: 26,
           transition: "color 0.4s",
         }}>{ht.tagline}</p>
- 
+
         <p style={{
           fontFamily: "'Inter',sans-serif", fontSize: 15, lineHeight: 1.75, fontWeight: 300, maxWidth: 520,
           color: d ? "rgba(255,255,255,0.46)" : "rgba(15,13,8,0.5)", marginBottom: 40,
         }}>{ht.desc}</p>
- 
+
         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: 12 }}>
           <a href={`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(t.wa_msg.quote)}`}
             target="_blank" rel="noopener noreferrer"
@@ -691,7 +850,7 @@ const Hero = memo(function Hero({ mode, scrollTo, region }: { mode: Mode; scroll
             {t.hero.cta_secondary}
           </button>
         </div>
- 
+
         <div style={{
           marginTop: 52, paddingTop: 36, display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 24,
           width: "100%", maxWidth: 360,
@@ -709,7 +868,7 @@ const Hero = memo(function Hero({ mode, scrollTo, region }: { mode: Mode; scroll
           ))}
         </div>
       </div>
- 
+
       <div style={{ position: "absolute", bottom: 38, left: "50%", zIndex: 10, animation: "scrollBounce 2.4s ease-in-out infinite", display: "flex", flexDirection: "column", alignItems: "center", gap: 7 }}>
         <div style={{ width: 1, height: 38, background: d ? "rgba(255,255,255,0.3)" : `rgba(184,145,42,0.5)` }} />
         <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 8, letterSpacing: "0.55em", textTransform: "uppercase", color: d ? "rgba(255,255,255,0.3)" : `rgba(184,145,42,0.5)` }}>scroll</span>
@@ -717,11 +876,11 @@ const Hero = memo(function Hero({ mode, scrollTo, region }: { mode: Mode; scroll
     </section>
   );
 });
- 
+
 const ModeBanner = memo(function ModeBanner({ mode, setMode }: { mode: Mode; setMode: (m: Mode) => void }) {
   const d      = mode === "digital";
   const reveal = useReveal("up", 0);
- 
+
   return (
     <div ref={reveal.ref} style={{ ...reveal.style, display: "flex", alignItems: "stretch" }}>
       <button className="mode-banner-half" onClick={() => setMode("digital")} style={{
@@ -745,9 +904,9 @@ const ModeBanner = memo(function ModeBanner({ mode, setMode }: { mode: Mode; set
         }}>Marketing · Branding · IA</span>
         {!d && <span style={{ marginTop: 6, fontFamily: "'Inter',sans-serif", fontSize: 9, letterSpacing: "0.28em", textTransform: "uppercase", color: "rgba(0,0,0,0.28)", border: "1px solid rgba(0,0,0,0.1)", borderRadius: 100, padding: "5px 14px" }}>Explorar →</span>}
       </button>
- 
+
       <div style={{ width: 1, background: d ? "rgba(255,255,255,0.05)" : GOLD_BORDER, flexShrink: 0 }} />
- 
+
       <button className="mode-banner-half" onClick={() => setMode("studio")} style={{
         flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
         padding: "52px 32px", border: "none", cursor: "pointer", gap: 10, position: "relative", overflow: "hidden",
@@ -773,8 +932,8 @@ const ModeBanner = memo(function ModeBanner({ mode, setMode }: { mode: Mode; set
     </div>
   );
 });
- 
-/* ─── Nosotros — SIN DATOS PERSONALES ───────────────────── */
+
+/* ─── Nosotros — REWRITTEN TEAM SECTION ──────────────────────── */
 const Nosotros = memo(function Nosotros({ mode, region }: { mode: Mode; region: Region }) {
   const d      = mode === "digital";
   const bg     = d ? "#0a0a0a" : "#fff";
@@ -782,25 +941,26 @@ const Nosotros = memo(function Nosotros({ mode, region }: { mode: Mode; region: 
   const muted  = d ? "rgba(255,255,255,0.42)" : "rgba(15,13,8,0.46)";
   const border = d ? "rgba(255,255,255,0.07)" : GOLD_BORDER;
   const ta     = T[region].about;
- 
+
   const eyebrow   = d ? ta.eyebrow_d : ta.eyebrow_s;
   const title     = d ? ta.title_d : ta.title_s;
   const desc1     = d ? ta.desc1_d : ta.desc1_s;
   const desc2     = d ? ta.desc2_d : ta.desc2_s;
   const values    = d ? ta.values_d : ta.values_s;
   const badges    = d ? ta.badges_d : ta.badges_s;
+  const teamTitle = d ? ta.team_title_d : ta.team_title_s;
   const teamIntro = d ? ta.team_intro_d : ta.team_intro_s;
   const pillars   = d ? ta.team_pillars_d : ta.team_pillars_s;
- 
+
   const headerReveal = useReveal("up", 0);
   const left         = useReveal("left", 0.1);
   const right        = useReveal("right", 0.18);
   const teamReveal   = useReveal("up", 0.08);
- 
+
   return (
     <section id="nosotros" style={{ background: bg, borderTop: `1px solid ${border}`, transition: "background 0.5s" }}>
       <div className="section-wrap" style={{ maxWidth: 1100, margin: "0 auto" }}>
- 
+
         {/* Header */}
         <div ref={headerReveal.ref} style={{ ...headerReveal.style, marginBottom: 56 }}>
           <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, letterSpacing: "0.5em", textTransform: "uppercase", color: muted, marginBottom: 16, transition: "color 0.4s ease" }}>
@@ -810,9 +970,9 @@ const Nosotros = memo(function Nosotros({ mode, region }: { mode: Mode; region: 
             <ModeFade mode={mode}>{title}</ModeFade>
           </h2>
         </div>
- 
+
         {/* Two-column description */}
-        <div className="nosotros-grid" style={{ display: "grid", marginBottom: 64 }}>
+        <div className="nosotros-grid" style={{ display: "grid", marginBottom: 72 }}>
           <div ref={left.ref} style={left.style}>
             <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, lineHeight: 1.82, fontWeight: 300, color: muted, marginBottom: 16, transition: "color 0.4s ease" }}>
               <ModeFade mode={mode}>{desc1}</ModeFade>
@@ -848,25 +1008,50 @@ const Nosotros = memo(function Nosotros({ mode, region }: { mode: Mode; region: 
             </div>
           </div>
         </div>
- 
-        {/* Pillars — reemplaza la sección de team members */}
+
+        {/* ── TEAM SECTION — REDESIGNED ── */}
         <div ref={teamReveal.ref} style={teamReveal.style}>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, letterSpacing: "0.5em", textTransform: "uppercase", color: muted, marginBottom: 28 }}>
-            {ta.team_label}
-          </p>
- 
-          <div className="team-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+
+          {/* Team title */}
+          <div style={{ marginBottom: 40 }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, letterSpacing: "0.5em", textTransform: "uppercase", color: d ? "rgba(255,255,255,0.22)" : GOLD, marginBottom: 14 }}>
+              {ta.team_label}
+            </p>
+            <h3 style={{
+              fontFamily: "'Inter',sans-serif", fontWeight: 900,
+              fontSize: "clamp(28px,3.5vw,44px)", letterSpacing: "-0.03em",
+              textTransform: "uppercase", lineHeight: 1.1, whiteSpace: "pre-line",
+              color: text, transition: "color 0.4s",
+            }}>
+              <ModeFade mode={mode}>{teamTitle}</ModeFade>
+            </h3>
+          </div>
+
+          {/* Pillars */}
+          <div className="team-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 32 }}>
             {pillars.map((pillar, idx) => (
               <div key={idx} style={{
                 background: d ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.025)",
-                border: `1px solid ${border}`, borderRadius: 20, padding: 32,
-                transition: "border-color 0.4s",
-              }}>
-                <div style={{ fontSize: 22, marginBottom: 16 }}>{pillar.icon}</div>
+                border: `1px solid ${border}`, borderRadius: 20, padding: "32px 28px",
+                transition: "border-color 0.4s, background 0.3s",
+                display: "flex", flexDirection: "column", gap: 14,
+              }}
+                onMouseOver={e => (e.currentTarget as HTMLElement).style.background = d ? "rgba(255,255,255,0.055)" : "rgba(184,145,42,0.05)"}
+                onMouseOut={e => (e.currentTarget as HTMLElement).style.background = d ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.025)"}
+              >
+                <div style={{
+                  width: 44, height: 44, borderRadius: 12,
+                  background: d ? "rgba(255,255,255,0.06)" : "rgba(184,145,42,0.08)",
+                  border: `1px solid ${border}`,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 20,
+                }}>
+                  {pillar.icon}
+                </div>
                 <p style={{
                   fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 12,
                   letterSpacing: "0.18em", textTransform: "uppercase", color: text,
-                  marginBottom: 12, lineHeight: 1.4, transition: "color 0.4s",
+                  lineHeight: 1.4, transition: "color 0.4s",
                 }}>
                   <ModeFade mode={mode}>{pillar.label}</ModeFade>
                 </p>
@@ -879,12 +1064,35 @@ const Nosotros = memo(function Nosotros({ mode, region }: { mode: Mode; region: 
               </div>
             ))}
           </div>
- 
+
+          {/* Stats row */}
+          <div style={{
+            display: "grid", gridTemplateColumns: "repeat(3, 1fr)",
+            gap: 1, marginBottom: 28, overflow: "hidden", borderRadius: 16,
+            border: `1px solid ${border}`,
+          }}>
+            {[
+              { n: "10+", label: region === "MX" ? "Proyectos" : "Projects" },
+              { n: "2",   label: region === "MX" ? "Especialidades" : "Specialties" },
+              { n: "B2/C1", label: region === "MX" ? "Nivel inglés" : "English level" },
+            ].map((stat, i) => (
+              <div key={i} style={{
+                padding: "24px 20px", textAlign: "center",
+                background: d ? "rgba(255,255,255,0.025)" : "rgba(0,0,0,0.018)",
+                borderRight: i < 2 ? `1px solid ${border}` : "none",
+              }}>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 900, fontSize: 28, letterSpacing: "-0.03em", color: text, marginBottom: 6 }}>{stat.n}</p>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 9, letterSpacing: "0.28em", textTransform: "uppercase", color: muted }}>{stat.label}</p>
+              </div>
+            ))}
+          </div>
+
           {/* Bilingual badge */}
           <div style={{
-            marginTop: 24, display: "inline-flex", alignItems: "center", gap: 12,
+            display: "inline-flex", alignItems: "center", gap: 12,
             border: `1px solid ${border}`, borderRadius: 12, padding: "14px 20px",
             background: d ? "rgba(255,255,255,0.02)" : "rgba(184,145,42,0.03)",
+            marginBottom: 20,
           }}>
             <span style={{ fontSize: 16 }}>🌐</span>
             <div>
@@ -896,9 +1104,9 @@ const Nosotros = memo(function Nosotros({ mode, region }: { mode: Mode; region: 
               </p>
             </div>
           </div>
- 
-          {/* Shared badges */}
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 20 }}>
+
+          {/* Badges */}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
             {badges.map((b, i) => (
               <span key={`badge-${i}`} style={{
                 fontFamily: "'Inter',sans-serif", fontSize: 9, letterSpacing: "0.14em", textTransform: "uppercase",
@@ -911,7 +1119,7 @@ const Nosotros = memo(function Nosotros({ mode, region }: { mode: Mode; region: 
           </div>
         </div>
       </div>
- 
+
       <style>{`
         .nosotros-grid {
           grid-template-columns: 1fr 1fr;
@@ -926,8 +1134,14 @@ const Nosotros = memo(function Nosotros({ mode, region }: { mode: Mode; region: 
     </section>
   );
 });
- 
-const PriceSectionCard = memo(function PriceSectionCard({ section, d, region, delay }: { section: PriceSection; d: boolean; region: Region; delay: number }) {
+
+/* ─── PriceSectionCard — click row → open modal ─────────────── */
+const PriceSectionCard = memo(function PriceSectionCard({
+  section, d, region, delay, onRowClick,
+}: {
+  section: PriceSection; d: boolean; region: Region; delay: number;
+  onRowClick: (row: PriceRow) => void;
+}) {
   const [expanded, setExpanded] = useState(true);
   const reveal = useReveal("up", delay);
   const border = d ? "rgba(0,0,0,0.07)"   : GOLD_BORDER;
@@ -936,8 +1150,7 @@ const PriceSectionCard = memo(function PriceSectionCard({ section, d, region, de
   const accent = d ? "rgba(0,0,0,0.022)"  : "rgba(184,145,42,0.04)";
   const rows   = section.rows.filter(r => region === "US" ? r.usd !== "—" : true);
   const first  = region === "MX" ? rows[0]?.mxn : rows[0]?.usd;
-  const rowCls = d ? "price-row" : "price-row price-row-gold";
- 
+
   return (
     <div ref={reveal.ref} style={{ ...reveal.style, border: `1px solid ${border}`, borderRadius: 16, overflow: "hidden", marginBottom: 16 }}>
       <button onClick={() => setExpanded(e => !e)} style={{
@@ -959,23 +1172,41 @@ const PriceSectionCard = memo(function PriceSectionCard({ section, d, region, de
           <span style={{ color: muted, fontSize: 14, display: "inline-block", transition: "transform 0.3s", transform: expanded ? "rotate(180deg)" : "rotate(0deg)" }}>▾</span>
         </div>
       </button>
+
       {expanded && rows.map((r, i) => (
-        <div key={i} className={rowCls} style={{
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          gap: 16, padding: "13px 24px", borderTop: `1px solid ${border}`,
-        }}>
+        <div
+          key={i}
+          className={d ? "price-row" : "price-row-gold"}
+          onClick={() => onRowClick(r)}
+          style={{
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+            gap: 16, padding: "14px 24px", borderTop: `1px solid ${border}`,
+            cursor: "pointer",
+          }}
+        >
           <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 300, color: muted, flex: 1 }}>
             {region === "MX" ? r.label_MX : r.label_US}
           </p>
-          <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 14, color: text, flexShrink: 0 }}>
-            {region === "MX" ? r.mxn : r.usd}
-          </span>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
+            <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 14, color: text }}>
+              {region === "MX" ? r.mxn : r.usd}
+            </span>
+            {/* info hint */}
+            <span style={{
+              width: 18, height: 18, borderRadius: "50%",
+              border: `1px solid ${d ? "rgba(0,0,0,0.15)" : GOLD_BORDER}`,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 9, color: d ? "rgba(0,0,0,0.3)" : "rgba(184,145,42,0.55)",
+              fontFamily: "'Inter',sans-serif", fontWeight: 700,
+              flexShrink: 0,
+            }}>i</span>
+          </div>
         </div>
       ))}
     </div>
   );
 });
- 
+
 const Precios = memo(function Precios({ mode, region }: { mode: Mode; region: Region }) {
   const d        = mode === "digital";
   const text     = d ? "#0a0a0a" : "#0f0d08";
@@ -984,9 +1215,20 @@ const Precios = memo(function Precios({ mode, region }: { mode: Mode; region: Re
   const t        = T[region].pricing;
   const sections = d ? DIGITAL_SECTIONS : STUDIO_SECTIONS;
   const head     = useReveal("up", 0);
- 
+
+  const [activeRow, setActiveRow] = useState<PriceRow | null>(null);
+
   return (
     <section id="precios" style={{ background: "#fff", borderTop: `1px solid ${border}` }}>
+      {activeRow && (
+        <PriceModal
+          row={activeRow}
+          d={d}
+          region={region}
+          onClose={() => setActiveRow(null)}
+        />
+      )}
+
       <div className="section-wrap" style={{ maxWidth: 860, margin: "0 auto" }}>
         <div ref={head.ref} style={{ ...head.style, display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: 52, flexWrap: "wrap", gap: 24 }}>
           <div>
@@ -1007,8 +1249,32 @@ const Precios = memo(function Precios({ mode, region }: { mode: Mode; region: Re
             {t.cta}
           </a>
         </div>
+
+        {/* hint */}
+        <p style={{
+          fontFamily: "'Inter',sans-serif", fontSize: 10, letterSpacing: "0.2em",
+          textTransform: "uppercase", color: muted, marginBottom: 24,
+          display: "flex", alignItems: "center", gap: 8,
+        }}>
+          <span style={{
+            width: 16, height: 16, borderRadius: "50%",
+            border: `1px solid ${d ? "rgba(0,0,0,0.2)" : GOLD_BORDER}`,
+            display: "inline-flex", alignItems: "center", justifyContent: "center",
+            fontSize: 8, color: d ? "rgba(0,0,0,0.35)" : "rgba(184,145,42,0.7)",
+            fontWeight: 700,
+          }}>i</span>
+          {region === "MX" ? "Haz clic en cualquier servicio para ver los detalles" : "Click any service to see details"}
+        </p>
+
         {sections.map((s, i) => (
-          <PriceSectionCard key={`${s.title_MX}-${mode}`} section={s} d={d} region={region} delay={i * 0.06} />
+          <PriceSectionCard
+            key={`${s.title_MX}-${mode}`}
+            section={s}
+            d={d}
+            region={region}
+            delay={i * 0.06}
+            onRowClick={setActiveRow}
+          />
         ))}
         <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: muted, marginTop: 24, lineHeight: 1.7, fontWeight: 300 }}>
           {d ? t.note_d : t.note_s}
@@ -1017,7 +1283,7 @@ const Precios = memo(function Precios({ mode, region }: { mode: Mode; region: Re
     </section>
   );
 });
- 
+
 const Contacto = memo(function Contacto({ mode, region }: { mode: Mode; region: Region }) {
   const d       = mode === "digital";
   const bg      = d ? "#0a0a0a" : "#fff";
@@ -1028,14 +1294,14 @@ const Contacto = memo(function Contacto({ mode, region }: { mode: Mode; region: 
   const email   = d ? EMAIL_D : EMAIL_S;
   const t       = T[region].contact;
   const [msg, setMsg] = useState("");
- 
+
   const left  = useReveal("left", 0);
   const right = useReveal("right", 0.1);
- 
+
   const waFull = msg.trim()
     ? `${T[region].wa_msg.contact}\n\n${msg.trim()}`
     : T[region].wa_msg.contact;
- 
+
   return (
     <section id="contacto" style={{ background: bg, borderTop: `1px solid ${border}`, transition: "background 0.5s" }}>
       <div className="section-wrap" style={{ maxWidth: 1100, margin: "0 auto" }}>
@@ -1050,7 +1316,7 @@ const Contacto = memo(function Contacto({ mode, region }: { mode: Mode; region: 
               <a href={`https://www.instagram.com/${IG_USER}`} target="_blank" rel="noopener noreferrer" style={{ color: muted, textDecoration: "none", letterSpacing: "0.14em", textTransform: "uppercase" }}>@{IG_USER}</a>
             </div>
           </div>
- 
+
           <div ref={right.ref} style={right.style}>
             <div style={{ background: d ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.02)", border: `1px solid ${border}`, borderRadius: 24, padding: 32 }}>
               <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, letterSpacing: "0.4em", textTransform: "uppercase", color: muted, marginBottom: 20 }}>
@@ -1103,12 +1369,12 @@ const Contacto = memo(function Contacto({ mode, region }: { mode: Mode; region: 
     </section>
   );
 });
- 
+
 const Footer = memo(function Footer({ mode, region }: { mode: Mode; region: Region }) {
   const d    = mode === "digital";
   const text = d ? "rgba(255,255,255,0.18)" : "rgba(184,145,42,0.5)";
   const bdr  = d ? "rgba(255,255,255,0.05)" : GOLD_BORDER;
- 
+
   return (
     <footer style={{ background: d ? "#000" : "#fff", borderTop: `1px solid ${bdr}`, padding: "28px 24px", transition: "background 0.5s" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 16, fontFamily: "'Inter',sans-serif", fontSize: 9, letterSpacing: "0.3em", textTransform: "uppercase", color: text }}>
@@ -1122,12 +1388,12 @@ const Footer = memo(function Footer({ mode, region }: { mode: Mode; region: Regi
     </footer>
   );
 });
- 
+
 export default function Home() {
   const [mode,   setMode]   = useState<Mode>("digital");
   const [region, setRegion] = useState<Region>("MX");
   const [scrollY, setScrollY] = useState(0);
- 
+
   useEffect(() => {
     let raf = 0;
     const handle = () => {
@@ -1143,13 +1409,13 @@ export default function Home() {
       if (raf) cancelAnimationFrame(raf);
     };
   }, []);
- 
+
   const scrollTo = useCallback((id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   }, []);
- 
+
   const navScrolled = scrollY > 50;
- 
+
   return (
     <>
       <style>{GLOBAL_CSS}</style>
