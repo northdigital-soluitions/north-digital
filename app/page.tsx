@@ -34,17 +34,17 @@ const T = {
       eyebrow_s: "Quiénes somos",
       title_d:   "North\nDigital",
       title_s:   "North\nStudio",
-      desc1_d: "Somos el aliado digital de comercios, empresas y marcas que buscan crecer. Desarrollamos presencia web, identidad visual y estrategias digitales con enfoque en resultados medibles.",
-      desc2_d: "Desde una landing page hasta un sistema de automatización completo — llevamos tu operación al siguiente nivel con tecnología a medida y atención directa.",
+      desc1_d: "Tu marca necesita más que presencia en línea — necesita infraestructura digital que convierta visitas en clientes reales. Desarrollamos sitios web, identidad visual y estrategias con enfoque en resultados medibles.",
+      desc2_d: "De la landing page que necesitas hoy al sistema de automatización que te escala mañana — operamos como el socio técnico y estratégico que tu negocio merece.",
       values_d: ["Tecnología", "Escalabilidad", "Resultados", "Estrategia"],
-      desc1_s: "Somos el equipo creativo detrás de tus momentos más especiales. Diseñamos invitaciones digitales, menús, flyers y presentaciones para personas, fiestas y restaurantes con sello propio.",
-      desc2_s: "Cada diseño cuenta una historia — la tuya. Trabajamos contigo para que cada pieza refleje exactamente la vibra que buscas: elegante, divertida, moderna o íntima.",
+      desc1_s: "Cada pieza que diseñamos tiene un propósito claro: hacer que tu momento luzca exactamente como lo imaginaste, con la calidad visual que merece. Invitaciones, presentaciones, flyers y menús con sello propio.",
+      desc2_s: "El detalle importa. Tipografía, color, espacio — cada decisión está pensada para que tu proyecto destaque y sea recordado por las razones correctas.",
       values_s: ["Diseño", "Creatividad", "Personalización", "Calidez"],
       team_label: "Nuestro equipo",
       team_title_d: "Tecnología con\nvisión estratégica",
       team_title_s: "Creatividad con\nprecisión técnica",
-      team_intro_d: "Somos un equipo multidisciplinario que combina dominio técnico en desarrollo y automatización con visión estratégica de marketing y comunicación. Operamos con enfoque en resultados, atención personalizada y capacidad bilingüe — español e inglés (B2/C1) — para proyectos locales e internacionales.",
-      team_intro_s: "Somos un equipo creativo que fusiona sensibilidad estética con precisión técnica. Cada proyecto recibe criterio propio y atención al detalle, con capacidad bilingüe — español e inglés (B2/C1) — para proyectos con alcance internacional.",
+      team_intro_d: "Desarrollo técnico y estrategia de marketing que trabajan juntos — bilingüe (español · inglés B2/C1) para proyectos locales e internacionales.",
+      team_intro_s: "Diseño con criterio propio y entrega precisa — bilingüe (español · inglés B2/C1) para proyectos con alcance internacional.",
       team_pillars_d: [
         { icon: "⚙️", label: "Tecnología & Desarrollo", desc: "Infraestructura digital a medida: sitios web, automatizaciones y aplicaciones construidas para escalar." },
         { icon: "◈", label: "Marketing & Estrategia", desc: "Posicionamiento de marca, gestión de redes sociales y comunicación orientada a resultados reales." },
@@ -104,17 +104,17 @@ const T = {
       eyebrow_s: "Who we are",
       title_d:   "North\nDigital",
       title_s:   "North\nStudio",
-      desc1_d: "We are the digital partner for businesses, brands, and companies looking to grow. We build web presence, visual identity, and digital strategies focused on measurable results.",
-      desc2_d: "From a landing page to a full automation system — we take your operation to the next level with tailored technology and direct attention.",
+      desc1_d: "Your brand needs more than a good-looking website — it needs digital infrastructure that turns visitors into real customers. We build websites, visual identity, and strategies focused on measurable results.",
+      desc2_d: "From the landing page you need today to the automation system that scales with you tomorrow — we operate as the technical and strategic partner your business deserves.",
       values_d: ["Technology", "Scalability", "Results", "Strategy"],
-      desc1_s: "We are the creative team behind your most special moments. We design digital invitations, menus, flyers, and presentations for individuals, celebrations, and restaurants with a distinctive touch.",
-      desc2_s: "Every design tells a story — yours. We work with you so each piece reflects exactly the vibe you're after: elegant, fun, modern, or intimate.",
+      desc1_s: "Every piece we design has a clear purpose: making your moment look exactly as you imagined it, with the visual quality it deserves. Invitations, presentations, flyers, and menus with a distinctive touch.",
+      desc2_s: "The details matter. Typography, color, space — every decision is crafted so your project stands out and is remembered for the right reasons.",
       values_s: ["Design", "Creativity", "Personalization", "Warmth"],
       team_label: "Our team",
       team_title_d: "Technology with\nstrategic vision",
       team_title_s: "Creativity with\ntechnical precision",
-      team_intro_d: "We are a multidisciplinary team combining technical expertise in software development and automation with strategic vision in marketing and communication. We work with a results-driven approach, personalized attention, and full bilingual capacity — Spanish and English (B2/C1) — to serve both local and international clients.",
-      team_intro_s: "We are a creative team that blends aesthetic sensibility with technical precision. Every project is handled with intention and attention to detail, and we operate with full bilingual capacity — Spanish and English (B2/C1) — to support projects with international reach.",
+      team_intro_d: "Technical development and marketing strategy working together — bilingual (Spanish · English B2/C1) for local and international projects.",
+      team_intro_s: "Design with intention and precise delivery — bilingual (Spanish · English B2/C1) for projects with international reach.",
       team_pillars_d: [
         { icon: "⚙️", label: "Technology & Development", desc: "Custom digital infrastructure: websites, automations, and applications built to scale." },
         { icon: "◈", label: "Marketing & Strategy", desc: "Brand positioning, social media management, and communication focused on measurable outcomes." },
@@ -374,7 +374,6 @@ function PriceModal({ row, d, region, onClose }: PriceModalProps) {
           position: "relative",
         }}
       >
-        {/* close btn */}
         <button
           onClick={handleClose}
           style={{
@@ -389,7 +388,6 @@ function PriceModal({ row, d, region, onClose }: PriceModalProps) {
           onMouseOut={e => (e.currentTarget as HTMLElement).style.background = d ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.06)"}
         >×</button>
 
-        {/* eyebrow */}
         <p style={{
           fontFamily: "'Inter',sans-serif", fontSize: 9, letterSpacing: "0.5em",
           textTransform: "uppercase", color: d ? "rgba(255,255,255,0.3)" : GOLD,
@@ -398,7 +396,6 @@ function PriceModal({ row, d, region, onClose }: PriceModalProps) {
           {region === "MX" ? "Servicio" : "Service"}
         </p>
 
-        {/* service name */}
         <h3 style={{
           fontFamily: "'Inter',sans-serif", fontWeight: 700,
           fontSize: 18, lineHeight: 1.35, letterSpacing: "-0.01em",
@@ -407,14 +404,12 @@ function PriceModal({ row, d, region, onClose }: PriceModalProps) {
           paddingRight: 28,
         }}>{label}</h3>
 
-        {/* divider */}
         <div style={{
           height: 1,
           background: d ? "rgba(255,255,255,0.07)" : GOLD_BORDER,
           marginBottom: 28,
         }} />
 
-        {/* price */}
         <p style={{
           fontFamily: "'Inter',sans-serif", fontWeight: 900,
           fontSize: "clamp(44px,10vw,68px)", letterSpacing: "-0.04em",
@@ -423,7 +418,6 @@ function PriceModal({ row, d, region, onClose }: PriceModalProps) {
           marginBottom: 24,
         }}>{price}</p>
 
-        {/* description */}
         {desc && (
           <p style={{
             fontFamily: "'Inter',sans-serif", fontSize: 13,
@@ -433,7 +427,6 @@ function PriceModal({ row, d, region, onClose }: PriceModalProps) {
           }}>{desc}</p>
         )}
 
-        {/* CTA */}
         <a
           href={`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(waText)}`}
           target="_blank" rel="noopener noreferrer"
@@ -474,7 +467,7 @@ function PriceModal({ row, d, region, onClose }: PriceModalProps) {
   );
 }
 
-/* ─── useReveal — FIXED: fires on mount if already in view ───── */
+/* ─── useReveal ─────────────────────────────────────────────────── */
 function useReveal(direction: "up" | "left" | "right" = "up", delay = 0) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -490,15 +483,12 @@ function useReveal(direction: "up" | "left" | "right" = "up", delay = 0) {
 
     const reveal = () => setVisible(true);
 
-    // Check immediately (element may already be in viewport on mount)
     const rect = el.getBoundingClientRect();
     if (rect.top < window.innerHeight + 60) {
-      // Small delay so CSS transition has time to register initial state
       const t = setTimeout(reveal, 60);
       return () => clearTimeout(t);
     }
 
-    // Otherwise observe
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -933,130 +923,225 @@ const ModeBanner = memo(function ModeBanner({ mode, setMode }: { mode: Mode; set
   );
 });
 
-/* ─── Nosotros — REWRITTEN TEAM SECTION ──────────────────────── */
+/* ─── Nosotros — REDISEÑADO ──────────────────────────────────── */
 const Nosotros = memo(function Nosotros({ mode, region }: { mode: Mode; region: Region }) {
   const d      = mode === "digital";
   const bg     = d ? "#0a0a0a" : "#fff";
   const text   = d ? "#fff" : "#0f0d08";
-  const muted  = d ? "rgba(255,255,255,0.42)" : "rgba(15,13,8,0.46)";
-  const border = d ? "rgba(255,255,255,0.07)" : GOLD_BORDER;
+  const muted  = d ? "rgba(255,255,255,0.38)" : "rgba(15,13,8,0.44)";
+  const border = d ? "rgba(255,255,255,0.08)" : GOLD_BORDER;
   const ta     = T[region].about;
 
-  const eyebrow   = d ? ta.eyebrow_d : ta.eyebrow_s;
-  const title     = d ? ta.title_d : ta.title_s;
-  const desc1     = d ? ta.desc1_d : ta.desc1_s;
-  const desc2     = d ? ta.desc2_d : ta.desc2_s;
-  const values    = d ? ta.values_d : ta.values_s;
-  const badges    = d ? ta.badges_d : ta.badges_s;
-  const teamTitle = d ? ta.team_title_d : ta.team_title_s;
-  const teamIntro = d ? ta.team_intro_d : ta.team_intro_s;
+  const eyebrow   = d ? ta.eyebrow_d   : ta.eyebrow_s;
+  const title     = d ? ta.title_d     : ta.title_s;
+  const desc1     = d ? ta.desc1_d     : ta.desc1_s;
+  const desc2     = d ? ta.desc2_d     : ta.desc2_s;
+  const values    = d ? ta.values_d    : ta.values_s;
+  const badges    = d ? ta.badges_d    : ta.badges_s;
+  const teamTitle = d ? ta.team_title_d  : ta.team_title_s;
+  const teamIntro = d ? ta.team_intro_d  : ta.team_intro_s;
   const pillars   = d ? ta.team_pillars_d : ta.team_pillars_s;
 
   const headerReveal = useReveal("up", 0);
-  const left         = useReveal("left", 0.1);
-  const right        = useReveal("right", 0.18);
-  const teamReveal   = useReveal("up", 0.08);
+  const left         = useReveal("left", 0.08);
+  const right        = useReveal("right", 0.16);
+  const teamReveal   = useReveal("up", 0.06);
+
+  const stats = d
+    ? [
+        { n: "10+",  label: region === "MX" ? "Proyectos" : "Projects" },
+        { n: "24/7", label: region === "MX" ? "Disponibles" : "Available" },
+        { n: "B2/C1",label: region === "MX" ? "Inglés" : "English" },
+      ]
+    : [
+        { n: "10+",  label: region === "MX" ? "Proyectos" : "Projects" },
+        { n: "48h",  label: region === "MX" ? "Entrega" : "Delivery" },
+        { n: "B2/C1",label: region === "MX" ? "Inglés" : "English" },
+      ];
 
   return (
     <section id="nosotros" style={{ background: bg, borderTop: `1px solid ${border}`, transition: "background 0.5s" }}>
       <div className="section-wrap" style={{ maxWidth: 1100, margin: "0 auto" }}>
 
-        {/* Header */}
-        <div ref={headerReveal.ref} style={{ ...headerReveal.style, marginBottom: 56 }}>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, letterSpacing: "0.5em", textTransform: "uppercase", color: muted, marginBottom: 16, transition: "color 0.4s ease" }}>
+        {/* HEADER */}
+        <div ref={headerReveal.ref} style={{ ...headerReveal.style, marginBottom: 64 }}>
+          <p style={{
+            fontFamily: "'Inter',sans-serif", fontSize: 10, letterSpacing: "0.5em",
+            textTransform: "uppercase", color: d ? "rgba(255,255,255,0.25)" : GOLD,
+            marginBottom: 18, transition: "color 0.4s ease",
+          }}>
             <ModeFade mode={mode}>{eyebrow}</ModeFade>
           </p>
-          <h2 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 900, fontSize: "clamp(40px,5vw,60px)", letterSpacing: "-0.03em", lineHeight: 1.05, color: text, marginBottom: 0, textTransform: "uppercase", whiteSpace: "pre-line", transition: "color 0.4s ease" }}>
+          <h2 style={{
+            fontFamily: "'Inter',sans-serif", fontWeight: 900,
+            fontSize: "clamp(44px,5.5vw,72px)", letterSpacing: "-0.04em",
+            lineHeight: 1.0, color: text, textTransform: "uppercase",
+            whiteSpace: "pre-line", transition: "color 0.4s ease",
+          }}>
             <ModeFade mode={mode}>{title}</ModeFade>
           </h2>
         </div>
 
-        {/* Two-column description */}
-        <div className="nosotros-grid" style={{ display: "grid", marginBottom: 72 }}>
+        {/* DOS COLUMNAS */}
+        <div className="nosotros-grid" style={{ display: "grid", marginBottom: 80, alignItems: "start" }}>
+
+          {/* Izquierda — copy principal */}
           <div ref={left.ref} style={left.style}>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, lineHeight: 1.82, fontWeight: 300, color: muted, marginBottom: 16, transition: "color 0.4s ease" }}>
+            <p style={{
+              fontFamily: "'Inter',sans-serif",
+              fontSize: "clamp(15px,1.5vw,17px)", lineHeight: 1.8, fontWeight: 300,
+              color: muted, marginBottom: 22, transition: "color 0.4s ease",
+            }}>
               <ModeFade mode={mode}>{desc1}</ModeFade>
             </p>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, lineHeight: 1.82, fontWeight: 300, color: muted, transition: "color 0.4s ease" }}>
+            <p style={{
+              fontFamily: "'Inter',sans-serif",
+              fontSize: "clamp(15px,1.5vw,17px)", lineHeight: 1.8, fontWeight: 300,
+              color: muted, marginBottom: 36, transition: "color 0.4s ease",
+            }}>
               <ModeFade mode={mode}>{desc2}</ModeFade>
             </p>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+              {values.map((v, i) => (
+                <span key={`val-${i}`} style={{
+                  fontFamily: "'Inter',sans-serif", fontSize: 9, letterSpacing: "0.22em",
+                  textTransform: "uppercase", padding: "8px 16px", borderRadius: 100,
+                  border: `1px solid ${border}`,
+                  color: d ? "rgba(255,255,255,0.35)" : "rgba(15,13,8,0.42)",
+                  transition: "border-color 0.4s, color 0.4s",
+                }}>
+                  <ModeFade mode={mode}>{v}</ModeFade>
+                </span>
+              ))}
+            </div>
           </div>
+
+          {/* Derecha — statement + métricas + badge */}
           <div ref={right.ref} style={right.style}>
+
+            {/* Statement tipográfico con borde izquierdo */}
             <div style={{
-              background: "#fff",
-              borderRadius: 20,
-              padding: 32,
-              display: "flex",
-              flexDirection: "column",
-              gap: 20,
-              boxShadow: d ? "0 10px 36px rgba(0,0,0,0.4)" : "0 4px 22px rgba(15,13,8,0.06)",
-              border: d ? "none" : `1px solid ${GOLD_BORDER}`,
+              borderLeft: `2px solid ${d ? "rgba(255,255,255,0.1)" : GOLD_BORDER}`,
+              paddingLeft: 22,
+              marginBottom: 32,
             }}>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, lineHeight: 1.8, fontWeight: 300, color: "rgba(15,13,8,0.62)" }}>
+              <p style={{
+                fontFamily: "'Inter',sans-serif", fontWeight: 700,
+                fontSize: "clamp(17px,1.8vw,22px)", lineHeight: 1.5,
+                letterSpacing: "-0.015em",
+                color: d ? "rgba(255,255,255,0.78)" : "#0f0d08",
+                transition: "color 0.4s",
+              }}>
                 <ModeFade mode={mode}>{teamIntro}</ModeFade>
               </p>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                {values.map((v, i) => (
-                  <span key={`val-${i}`} style={{
-                    fontFamily: "'Inter',sans-serif", fontSize: 9, letterSpacing: "0.22em", textTransform: "uppercase",
-                    padding: "7px 14px", borderRadius: 100, border: "1px solid rgba(15,13,8,0.14)", color: "rgba(15,13,8,0.55)",
-                  }}>
-                    <ModeFade mode={mode}>{v}</ModeFade>
-                  </span>
-                ))}
-              </div>
+            </div>
+
+            {/* Grid de 3 métricas */}
+            <div style={{
+              display: "grid", gridTemplateColumns: "repeat(3, 1fr)",
+              border: `1px solid ${border}`, borderRadius: 16,
+              overflow: "hidden", marginBottom: 18,
+            }}>
+              {stats.map((s, i) => (
+                <div key={i} style={{
+                  padding: "22px 14px", textAlign: "center",
+                  background: d ? "rgba(255,255,255,0.022)" : "rgba(184,145,42,0.03)",
+                  borderRight: i < 2 ? `1px solid ${border}` : "none",
+                }}>
+                  <p style={{
+                    fontFamily: "'Inter',sans-serif", fontWeight: 900,
+                    fontSize: "clamp(20px,2vw,26px)", letterSpacing: "-0.03em",
+                    color: text, marginBottom: 5, transition: "color 0.4s",
+                  }}>{s.n}</p>
+                  <p style={{
+                    fontFamily: "'Inter',sans-serif", fontSize: 9,
+                    letterSpacing: "0.22em", textTransform: "uppercase", color: muted,
+                  }}>{s.label}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Badge bilingüe */}
+            <div style={{
+              display: "inline-flex", alignItems: "center", gap: 10,
+              border: `1px solid ${border}`, borderRadius: 10,
+              padding: "11px 16px",
+              background: d ? "rgba(255,255,255,0.02)" : "rgba(184,145,42,0.03)",
+            }}>
+              <span style={{ fontSize: 14 }}>🌐</span>
+              <span style={{
+                fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600,
+                color: d ? "rgba(255,255,255,0.52)" : "rgba(184,145,42,0.82)",
+                letterSpacing: "0.08em",
+              }}>
+                {ta.bilingual_note}
+              </span>
             </div>
           </div>
         </div>
 
-        {/* ── TEAM SECTION — REDESIGNED ── */}
+        {/* SEPARADOR */}
+        <div style={{
+          height: 1,
+          background: d
+            ? "linear-gradient(90deg, transparent, rgba(255,255,255,0.07) 25%, rgba(255,255,255,0.07) 75%, transparent)"
+            : `linear-gradient(90deg, transparent, ${GOLD_BORDER} 25%, ${GOLD_BORDER} 75%, transparent)`,
+          marginBottom: 72,
+        }} />
+
+        {/* EQUIPO */}
         <div ref={teamReveal.ref} style={teamReveal.style}>
 
-          {/* Team title */}
-          <div style={{ marginBottom: 40 }}>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, letterSpacing: "0.5em", textTransform: "uppercase", color: d ? "rgba(255,255,255,0.22)" : GOLD, marginBottom: 14 }}>
+          <div style={{ marginBottom: 44 }}>
+            <p style={{
+              fontFamily: "'Inter',sans-serif", fontSize: 10, letterSpacing: "0.5em",
+              textTransform: "uppercase",
+              color: d ? "rgba(255,255,255,0.22)" : GOLD,
+              marginBottom: 14,
+            }}>
               {ta.team_label}
             </p>
             <h3 style={{
               fontFamily: "'Inter',sans-serif", fontWeight: 900,
-              fontSize: "clamp(28px,3.5vw,44px)", letterSpacing: "-0.03em",
-              textTransform: "uppercase", lineHeight: 1.1, whiteSpace: "pre-line",
-              color: text, transition: "color 0.4s",
+              fontSize: "clamp(30px,3.8vw,48px)", letterSpacing: "-0.035em",
+              textTransform: "uppercase", lineHeight: 1.08,
+              whiteSpace: "pre-line", color: text, transition: "color 0.4s",
             }}>
               <ModeFade mode={mode}>{teamTitle}</ModeFade>
             </h3>
           </div>
 
-          {/* Pillars */}
-          <div className="team-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 32 }}>
+          {/* Pillares */}
+          <div className="team-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 24 }}>
             {pillars.map((pillar, idx) => (
               <div key={idx} style={{
-                background: d ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.025)",
-                border: `1px solid ${border}`, borderRadius: 20, padding: "32px 28px",
-                transition: "border-color 0.4s, background 0.3s",
-                display: "flex", flexDirection: "column", gap: 14,
+                border: `1px solid ${border}`, borderRadius: 18,
+                padding: "28px 26px",
+                background: d ? "rgba(255,255,255,0.025)" : "rgba(184,145,42,0.025)",
+                transition: "background 0.25s",
+                display: "flex", flexDirection: "column", gap: 16,
               }}
-                onMouseOver={e => (e.currentTarget as HTMLElement).style.background = d ? "rgba(255,255,255,0.055)" : "rgba(184,145,42,0.05)"}
-                onMouseOut={e => (e.currentTarget as HTMLElement).style.background = d ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.025)"}
+                onMouseOver={e => (e.currentTarget as HTMLElement).style.background = d ? "rgba(255,255,255,0.05)" : "rgba(184,145,42,0.06)"}
+                onMouseOut={e => (e.currentTarget as HTMLElement).style.background = d ? "rgba(255,255,255,0.025)" : "rgba(184,145,42,0.025)"}
               >
                 <div style={{
-                  width: 44, height: 44, borderRadius: 12,
-                  background: d ? "rgba(255,255,255,0.06)" : "rgba(184,145,42,0.08)",
+                  width: 42, height: 42, borderRadius: 11,
+                  background: d ? "rgba(255,255,255,0.05)" : "rgba(184,145,42,0.08)",
                   border: `1px solid ${border}`,
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 20,
+                  fontSize: 18,
                 }}>
                   {pillar.icon}
                 </div>
                 <p style={{
-                  fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 12,
-                  letterSpacing: "0.18em", textTransform: "uppercase", color: text,
-                  lineHeight: 1.4, transition: "color 0.4s",
+                  fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 11,
+                  letterSpacing: "0.2em", textTransform: "uppercase",
+                  color: text, lineHeight: 1.4, transition: "color 0.4s",
                 }}>
                   <ModeFade mode={mode}>{pillar.label}</ModeFade>
                 </p>
                 <p style={{
-                  fontFamily: "'Inter',sans-serif", fontSize: 13, lineHeight: 1.78,
+                  fontFamily: "'Inter',sans-serif", fontSize: 13, lineHeight: 1.8,
                   fontWeight: 300, color: muted, transition: "color 0.4s ease",
                 }}>
                   <ModeFade mode={mode}>{pillar.desc}</ModeFade>
@@ -1065,52 +1150,13 @@ const Nosotros = memo(function Nosotros({ mode, region }: { mode: Mode; region: 
             ))}
           </div>
 
-          {/* Stats row */}
-          <div style={{
-            display: "grid", gridTemplateColumns: "repeat(3, 1fr)",
-            gap: 1, marginBottom: 28, overflow: "hidden", borderRadius: 16,
-            border: `1px solid ${border}`,
-          }}>
-            {[
-              { n: "10+", label: region === "MX" ? "Proyectos" : "Projects" },
-              { n: "2",   label: region === "MX" ? "Especialidades" : "Specialties" },
-              { n: "B2/C1", label: region === "MX" ? "Nivel inglés" : "English level" },
-            ].map((stat, i) => (
-              <div key={i} style={{
-                padding: "24px 20px", textAlign: "center",
-                background: d ? "rgba(255,255,255,0.025)" : "rgba(0,0,0,0.018)",
-                borderRight: i < 2 ? `1px solid ${border}` : "none",
-              }}>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 900, fontSize: 28, letterSpacing: "-0.03em", color: text, marginBottom: 6 }}>{stat.n}</p>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 9, letterSpacing: "0.28em", textTransform: "uppercase", color: muted }}>{stat.label}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Bilingual badge */}
-          <div style={{
-            display: "inline-flex", alignItems: "center", gap: 12,
-            border: `1px solid ${border}`, borderRadius: 12, padding: "14px 20px",
-            background: d ? "rgba(255,255,255,0.02)" : "rgba(184,145,42,0.03)",
-            marginBottom: 20,
-          }}>
-            <span style={{ fontSize: 16 }}>🌐</span>
-            <div>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 9, letterSpacing: "0.28em", textTransform: "uppercase", color: d ? "rgba(255,255,255,0.28)" : GOLD, marginBottom: 3 }}>
-                {ta.bilingual_label}
-              </p>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: text, letterSpacing: "0.06em" }}>
-                {ta.bilingual_note}
-              </p>
-            </div>
-          </div>
-
           {/* Badges */}
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 8 }}>
             {badges.map((b, i) => (
               <span key={`badge-${i}`} style={{
-                fontFamily: "'Inter',sans-serif", fontSize: 9, letterSpacing: "0.14em", textTransform: "uppercase",
-                padding: "5px 12px", borderRadius: 100, border: `1px solid ${border}`, color: muted,
+                fontFamily: "'Inter',sans-serif", fontSize: 9, letterSpacing: "0.16em",
+                textTransform: "uppercase", padding: "6px 13px", borderRadius: 100,
+                border: `1px solid ${border}`, color: muted,
                 transition: "color 0.4s, border-color 0.4s",
               }}>
                 <ModeFade mode={mode}>{b}</ModeFade>
@@ -1123,19 +1169,19 @@ const Nosotros = memo(function Nosotros({ mode, region }: { mode: Mode; region: 
       <style>{`
         .nosotros-grid {
           grid-template-columns: 1fr 1fr;
-          gap: 64px;
+          gap: 72px;
           align-items: start;
         }
         @media (max-width: 768px) {
-          .nosotros-grid { grid-template-columns: 1fr; gap: 32px; }
-          .team-grid     { grid-template-columns: 1fr !important; gap: 16px !important; }
+          .nosotros-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+          .team-grid     { grid-template-columns: 1fr !important; gap: 14px !important; }
         }
       `}</style>
     </section>
   );
 });
 
-/* ─── PriceSectionCard — click row → open modal ─────────────── */
+/* ─── PriceSectionCard ───────────────────────────────────────── */
 const PriceSectionCard = memo(function PriceSectionCard({
   section, d, region, delay, onRowClick,
 }: {
@@ -1191,7 +1237,6 @@ const PriceSectionCard = memo(function PriceSectionCard({
             <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 14, color: text }}>
               {region === "MX" ? r.mxn : r.usd}
             </span>
-            {/* info hint */}
             <span style={{
               width: 18, height: 18, borderRadius: "50%",
               border: `1px solid ${d ? "rgba(0,0,0,0.15)" : GOLD_BORDER}`,
@@ -1250,7 +1295,6 @@ const Precios = memo(function Precios({ mode, region }: { mode: Mode; region: Re
           </a>
         </div>
 
-        {/* hint */}
         <p style={{
           fontFamily: "'Inter',sans-serif", fontSize: 10, letterSpacing: "0.2em",
           textTransform: "uppercase", color: muted, marginBottom: 24,
